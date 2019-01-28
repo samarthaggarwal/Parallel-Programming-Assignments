@@ -7,10 +7,10 @@ int main(){
 	srand ( time(NULL) );
 
 	int k,n;
-	cout<<"Enter K\n";
+	// cout<<"Enter K\n";
 	cin>>k;
 	
-	cout<<"Enter number of points\n";
+	// cout<<"Enter number of points\n";
 	cin>>n;
 
 	cout<<k<<endl<<n<<endl;

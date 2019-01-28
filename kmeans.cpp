@@ -54,6 +54,7 @@ void recomputeMeans(int n, int k, int points[][4], float means[][4]){ // recompu
 		for(int j=0;j<3;j++){
 			means[meanIndex][j]+=points[i][j];
 		}
+		means[meanIndex][3]++;
 	}
 
 	for(int i=0;i<k;i++){
@@ -65,6 +66,26 @@ void recomputeMeans(int n, int k, int points[][4], float means[][4]){ // recompu
 	}
 
 	return;
+}
+
+void printPoints(int points[][4], int n){
+	cout<<"\nPoints\n";
+	for(int i=0;i<n;i++){
+		for(int j=0;j<4;j++){
+			cout<<points[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+}
+
+void printMeans(float means[][4], int k){
+	cout<<"\nK means\n";
+	for(int i=0;i<k;i++){
+		for(int j=0;j<4;j++){
+			cout<<means[i][j]<<" ";
+		}
+		cout<<endl;
+	}
 }
 
 int main(int argc, char *argv[]){
@@ -93,38 +114,22 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-	cout<<"K means\n";
-	for(int i=0;i<k;i++){
-		for(int j=0;j<3;j++){
-			cout<<means[i][j]<<" ";
-		}
-		cout<<endl;
-	}
-
-	maxIterations = 1000;
-	thresNumChanges = 1;
+	maxIterations = 200;
+	thresNumChanges = 0;
 	for(int i=0;i<maxIterations;i++){
-		cout<<"iter "<<i+1<<endl;
-		if(assignPoints(n,k,points,means) < thresNumChanges)
+		// cout<<"\n\niter "<<i+1<<endl;
+		// printPoints(points,n);
+		// printMeans(means,k);
+	
+		if(assignPoints(n,k,points,means) <= thresNumChanges){
+			cout<<"numIter = "<<i+1<<endl;
 			break;
+		}
 		recomputeMeans(n,k,points,means);
 	}
 
-	cout<<"\npoints\n";
-	for(int i=0;i<n;i++){
-		for(int j=0;j<4;j++){
-			cout<<points[i][j]<<" ";
-		}
-		cout<<endl;
-	}
-
-	cout<<"\nK means\n";
-	for(int i=0;i<k;i++){
-		for(int j=0;j<3;j++){
-			cout<<means[i][j]<<" ";
-		}
-		cout<<endl;
-	}
+	// printPoints(points,n);
+	printMeans(means,k);
 
 	return 0;
 }

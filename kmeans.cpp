@@ -102,14 +102,15 @@ int main(int argc, char *argv[]){
 	}
 
 	maxIterations = 1000;
-	thresNumChanges = 2;
+	thresNumChanges = 1;
 	for(int i=0;i<maxIterations;i++){
+		cout<<"iter "<<i+1<<endl;
 		if(assignPoints(n,k,points,means) < thresNumChanges)
 			break;
 		recomputeMeans(n,k,points,means);
 	}
 
-	cout<<"points\n";
+	cout<<"\npoints\n";
 	for(int i=0;i<n;i++){
 		for(int j=0;j<4;j++){
 			cout<<points[i][j]<<" ";
@@ -117,14 +118,13 @@ int main(int argc, char *argv[]){
 		cout<<endl;
 	}
 
-	cout<<"K means\n";
+	cout<<"\nK means\n";
 	for(int i=0;i<k;i++){
 		for(int j=0;j<3;j++){
 			cout<<means[i][j]<<" ";
 		}
 		cout<<endl;
 	}
-
 
 	return 0;
 }

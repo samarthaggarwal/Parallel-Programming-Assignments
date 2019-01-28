@@ -4,11 +4,14 @@
 #include<climits>
 using namespace std;
 
-void assign(int n, int k, int points[][4], float means[][3]){ // assigns means to points as 4th dimension
+int assignPoints(int n, int k, int points[][4], float means[][4]){ // assigns points to means as 4th dimension
 	
-	float temp, tempDist, minDist=INT_MAX, minDistIndex=-1;
-	
+	float temp, tempDist, minDist, minDistIndex;
+	int numChanges = 0;
+
 	for(int i=0;i<n;i++){
+		minDist=INT_MAX;
+		minDistIndex=-1;
 		for(int j=0;j<k;j++){
 
 			tempDist=0;
@@ -23,7 +26,42 @@ void assign(int n, int k, int points[][4], float means[][3]){ // assigns means t
 			}
 		}
 
-		points[i][3]=minDistIndex;
+		if(minDistIndex!=points[i][3]){
+			points[i][3]=minDistIndex;
+			numChanges++;
+		}
+	}
+
+	return numChanges;
+}
+
+void recomputeMeans(int n, int k, int points[][4], float means[][4]){ // recompute means for each cluster
+	int meanIndex;
+
+	for(int i=0;i<k;i++){
+		means[i][3]=0;
+	}
+
+	for(int i=0;i<n;i++){
+		meanIndex = points[i][3];
+		for(int j=0;j<3;j++){
+			means[meanIndex][j] = 0;
+		}
+	}
+
+	for(int i=0;i<n;i++){
+		meanIndex = points[i][3];
+		for(int j=0;j<3;j++){
+			means[meanIndex][j]+=points[i][j];
+		}
+	}
+
+	for(int i=0;i<k;i++){
+		if(means[i][3]==0)
+			continue;
+		for(int j=0;j<3;j++){
+			means[i][j]/=means[i][3];
+		}
 	}
 
 	return;
@@ -32,28 +70,44 @@ void assign(int n, int k, int points[][4], float means[][3]){ // assigns means t
 int main(int argc, char *argv[]){
 	srand (time(NULL));
 
-	int k,n;
+	int k,n, maxIterations, thresNumChanges;
 	cout<<"Enter K\n";
 	cin>>k;
 	
 	cout<<"Enter number of points\n";
 	cin>>n;
-	int points[n][4];
-	float means[k][3];
+	int points[n][4];// 4th dim - cluster number
+	float means[k][4];// 4th dim - no. of points in cluster
 
+	//reading points
 	for(int i=0;i<n;i++){
 		for(int j=0;j<3;j++){
 			cin>>points[i][j];
 		}
 	}
 
+	// initialising means
 	for(int i=0; i<k; i++){
 		for(int j=0;j<3;j++){
 			means[i][j]=rand()%50;
 		}
 	}
 
-	assign(n,k,points,means);
+	cout<<"K means\n";
+	for(int i=0;i<k;i++){
+		for(int j=0;j<3;j++){
+			cout<<means[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+
+	maxIterations = 1000;
+	thresNumChanges = 2;
+	for(int i=0;i<maxIterations;i++){
+		if(assignPoints(n,k,points,means) < thresNumChanges)
+			break;
+		recomputeMeans(n,k,points,means);
+	}
 
 	cout<<"points\n";
 	for(int i=0;i<n;i++){

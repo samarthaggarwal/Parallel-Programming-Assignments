@@ -2,6 +2,6 @@
 COL380 - lab1
 
 ### Sequential:
-- [ ] - pthreads - done variable to sync instead of spawning and killing threads
+- [ ] - pthreads - done variable (array) to sync instead of spawning and killing threads
 
 

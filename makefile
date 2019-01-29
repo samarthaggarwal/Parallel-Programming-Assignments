@@ -1,5 +1,5 @@
 all:
-	g++ kmeans2.cpp -o kmeans.out
+	g++ kmeans2.cpp -o kmeans.out -fopenmp
 	./kmeans.out < in.txt
 
 pthread:

@@ -4,23 +4,60 @@
 #include<climits>
 #include<algorithm>
 #include<pthread.h>
+#include<omp.h>
 using namespace std;
 
-int assignPoints(int n, int k, int points[][4], float means[][4]){ // assigns points to means as 4th dimension
-	
+pthread_mutex_t lock;
+int n;
+int k;
+int lengthPerThread;
+int numThreads;
+
+struct point{
+	int x,y,z;
+	int cluster;
+};
+
+struct mean{
+	int count;
+	float x,y,z;
+};
+
+point *pointsPtr;
+mean *meansPtr;
+
+void* assign_points_t(void *tid){ // assigns points to means as 4th dimension
+
+	point *points = pointsPtr;
+	mean *means = meansPtr;
+
 	float temp, tempDist, minDist, minDistIndex;
 	int numChanges = 0;
+	int *tt = (int*) tid;
+	int t = *tt;
 
-	for(int i=0;i<n;i++){
+	for(int i=t*lengthPerThread ; i<(t+1)*lengthPerThread && i<n ; i++){
 		minDist=INT_MAX;
 		minDistIndex=-1;
 		for(int j=0;j<k;j++){
 
+			// cerr<<"point"<<i+1<<"\t"<<points[i].x<<" "<<points[i].y<<" "<<points[i].z<<"\t\tmean"<<j+1<<" "<<means[i].x<<" "<<means[i].y<<" "<<means[i].z<<"\t";
+
+
 			tempDist=0;
-			for(int k=0;k<3;k++){
-				temp=points[i][k]-means[j][k];
-				tempDist += temp*temp;
-			}
+			temp = points[i].x - means[j].x;
+			tempDist += temp*temp;
+	 		temp = points[i].y - means[j].y;
+			tempDist += temp*temp;
+			temp = points[i].z - means[j].z;
+			tempDist += temp*temp;
+
+			// cerr << tempDist <<endl;
+			
+			// for(int k=0;k<3;k++){
+			// 	temp=points[i][k]-means[j][k];
+			// 	tempDist += temp*temp;
+			// }
 
 			if(tempDist<minDist){
 				minDist=tempDist;
@@ -28,112 +65,164 @@ int assignPoints(int n, int k, int points[][4], float means[][4]){ // assigns po
 			}
 		}
 
-		if(minDistIndex!=points[i][3]){
-			points[i][3]=minDistIndex;
+		if(minDistIndex!=points[i].cluster){
+			points[i].cluster=minDistIndex;
 			numChanges++;
 		}
-	}
 
-	return numChanges;
+		// cerr << minDistIndex<< " ";
+	}
+	// cerr<<endl;
+
+	return NULL;
 }
 
-void recomputeMeans(int n, int k, int points[][4], float means[][4]){ // recompute means for each cluster
+void recompute_means(){ // recompute means for each cluster
+	
+	point *points = pointsPtr;
+	mean *means = meansPtr;
 	int meanIndex;
 
 	for(int i=0;i<k;i++){
-		means[i][3]=0;
+		means[i].count=(float)0;
 	}
 
 	for(int i=0;i<n;i++){
-		meanIndex = points[i][3];
-		for(int j=0;j<3;j++){
-			means[meanIndex][j] = 0;
-		}
+		meanIndex = points[i].cluster;
+		means[meanIndex].x=0;
+		means[meanIndex].y=0;
+		means[meanIndex].z=0;
+		// for(int j=0;j<3;j++){
+		// 	means[meanIndex][j] = 0;
+		// }
 	}
 
 	for(int i=0;i<n;i++){
-		meanIndex = points[i][3];
-		for(int j=0;j<3;j++){
-			means[meanIndex][j]+=points[i][j];
-		}
-		means[meanIndex][3]++;
+		meanIndex = points[i].cluster;
+		means[meanIndex].x += points[i].x;
+		means[meanIndex].y += points[i].y;
+		means[meanIndex].z += points[i].z;
+		
+		// for(int j=0;j<3;j++){
+		// 	means[meanIndex][j]+=points[i][j];
+		// }
+		means[meanIndex].count++;
 	}
 
 	for(int i=0;i<k;i++){
-		if(means[i][3]==0)
+		if(means[i].count==0)
 			continue;
-		for(int j=0;j<3;j++){
-			means[i][j]/=means[i][3];
-		}
+		means[i].x/=means[i].count;
+		means[i].y/=means[i].count;
+		means[i].z/=means[i].count;
+		
+		// for(int j=0;j<3;j++){
+		// 	means[i][j]/=means[i][3];
+		// }
 	}
 
 	return;
 }
 
-void printPoints(int points[][4], int n){
+void printPoints(){
+	point *points = pointsPtr;
+
 	cout<<"\nPoints\n";
 	for(int i=0;i<n;i++){
-		for(int j=0;j<4;j++){
-			cout<<points[i][j]<<" ";
-		}
-		cout<<endl;
+		cout<<points[i].x<<" "<<points[i].y<<" "<<points[i].z<<" "<<points[i].cluster<<endl;
+		// for(int j=0;j<4;j++){
+		// 	cout<<points[i][j]<<" ";
+		// }
+		// cout<<endl;
 	}
 }
 
-void printMeans(float means[][4], int k){
+void printMeans(){
+	mean *means = meansPtr;
+
 	cout<<"\nK means\n";
 	for(int i=0;i<k;i++){
-		for(int j=0;j<4;j++){
-			cout<<means[i][j]<<" ";
-		}
-		cout<<endl;
+		cout<<means[i].x<<" "<<means[i].y<<" "<<means[i].z<<" "<<means[i].count<<endl;
+		// for(int j=0;j<4;j++){
+		// 	cout<<means[i][j]<<" ";
+		// }
+		// cout<<endl;
 	}
 }
 
 int main(int argc, char *argv[]){
-	srand (time(NULL));
+	// srand (time(NULL));
+	srand(2);
 
-	int k,n, maxIterations, thresNumChanges, numThreads;
+	int maxIterations, thresNumChanges, numThreads;
 	cout<<"Enter K\n";
 	cin>>k;
 	
 	cout<<"Enter number of points\n";
 	cin>>n;
-	int points[n][4];// 4th dim - cluster number
-	float means[k][4];// 4th dim - no. of points in cluster
+	numThreads = 2;
+	lengthPerThread = (n/numThreads) + 1;
+	point points[n];// 4th dim - cluster number
+	mean means[k];// 4th dim - no. of points in cluster
+
+	pointsPtr = points;
+	meansPtr = means;
 
 	//reading points
 	for(int i=0;i<n;i++){
-		for(int j=0;j<3;j++){
-			cin>>points[i][j];
-		}
+		cin>>points[i].x;
+		cin>>points[i].y;
+		cin>>points[i].z;
 	}
 
 	random_shuffle(&points[0],&points[n]);
 	// initialising means
 	for(int i=0; i<k; i++){
-		for(int j=0;j<3;j++){
-			// means[i][j]=rand()%50;
-			means[i][j]=points[i][j];
-		}
+		// means[i][j]=rand()%50;
+		means[i].x=points[i].x;
+		means[i].y=points[i].y;
+		means[i].z=points[i].z;
 	}
+
+	double start, end;
+	start = omp_get_wtime();
+
+	pthread_t threads[numThreads];
+	pthread_mutex_init(&lock, NULL);
+	// int tid[numThreads];
+	int *tid = (int *) malloc (sizeof (int) * numThreads);
+
 
 	maxIterations = 200;
-	thresNumChanges = 0;
+	// thresNumChanges = 0;
 	for(int i=0;i<maxIterations;i++){
 		// cout<<"\n\niter "<<i+1<<endl;
-		// printPoints(points,n);
-		// printMeans(means,k);
-	
-		if(assignPoints(n,k,points,means) <= thresNumChanges){
-			cout<<"ended at numIter = "<<i+1<<endl;
-			break;
+		// printPoints(points);
+		// printMeans(means);
+
+		for(int t=0;t<numThreads;t++){
+			tid[t]=t;
+			pthread_create(&threads[t], NULL, assign_points_t, &tid[t]);
 		}
-		recomputeMeans(n,k,points,means);
+	
+		for (int t=0; t<numThreads; t++){
+  			pthread_join(threads[i], NULL);
+		}
+
+		// assign_points_t();
+		// printPoints();
+
+		// if(assign_points_t(points,means) <= thresNumChanges){
+		// 	cout<<"ended at numIter = "<<i+1<<endl;
+		// 	break;
+		// }
+		recompute_means();
 	}
 
-	// printPoints(points,n);
-	printMeans(means,k);
+	end = omp_get_wtime();
+	// printPoints();
+	printMeans();
+	cout<<"time = "<<end-start<<endl;
 
 	return 0;
 }

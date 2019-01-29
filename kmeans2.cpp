@@ -147,8 +147,8 @@ void printMeans(){
 }
 
 int main(int argc, char *argv[]){
-	// srand (time(NULL));
-	srand(2);
+	srand (time(NULL));
+	// srand(2);
 
 	int maxIterations, thresNumChanges, numThreads;
 	cout<<"Enter K\n";
@@ -178,8 +178,8 @@ int main(int argc, char *argv[]){
 		means[i].z=points[i].z;
 	}
 
-	// double start, end;
-	// start = omp_get_wtime();
+	double start, end;
+	start = omp_get_wtime();
 
 	// pthread_t threads[numThreads];
 	// pthread_mutex_init(&lock, NULL);
@@ -209,10 +209,10 @@ int main(int argc, char *argv[]){
 		recompute_means();
 	}
 
-	// end = omp_get_wtime();
+	end = omp_get_wtime();
 	// printPoints();
 	printMeans();
-	// cout<<"time = "<<end-start<<endl;
+	cout<<"time = "<<end-start<<endl;
 
 	return 0;
 }

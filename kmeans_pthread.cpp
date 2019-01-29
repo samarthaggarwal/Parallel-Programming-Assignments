@@ -3,6 +3,7 @@
 #include<time.h>
 #include<climits>
 #include<algorithm>
+#include<pthread.h>
 using namespace std;
 
 int assignPoints(int n, int k, int points[][4], float means[][4]){ // assigns points to means as 4th dimension
@@ -92,7 +93,7 @@ void printMeans(float means[][4], int k){
 int main(int argc, char *argv[]){
 	srand (time(NULL));
 
-	int k,n, maxIterations, thresNumChanges;
+	int k,n, maxIterations, thresNumChanges, numThreads;
 	cout<<"Enter K\n";
 	cin>>k;
 	
@@ -125,7 +126,7 @@ int main(int argc, char *argv[]){
 		// printMeans(means,k);
 	
 		if(assignPoints(n,k,points,means) <= thresNumChanges){
-			cout<<"numIter = "<<i+1<<endl;
+			cout<<"ended at numIter = "<<i+1<<endl;
 			break;
 		}
 		recomputeMeans(n,k,points,means);

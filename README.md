@@ -2,4 +2,6 @@
 COL380 - lab1
 
 ### Sequential:
-- [ ] - try forgy method initialisation
+- [ ] - pthreads - done variable to sync instead of spawning and killing threads
+
+

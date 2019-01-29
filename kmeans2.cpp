@@ -21,7 +21,13 @@ struct mean{
 	float x,y,z;
 };
 
-int assign_points_t(point *points, mean *means){ // assigns points to means as 4th dimension
+point *pointsPtr;
+mean *meansPtr;
+
+int assign_points_t(){ // assigns points to means as 4th dimension
+
+	point *points = pointsPtr;
+	mean *means = meansPtr;
 
 	float temp, tempDist, minDist, minDistIndex;
 	int numChanges = 0;
@@ -67,7 +73,10 @@ int assign_points_t(point *points, mean *means){ // assigns points to means as 4
 	return numChanges;
 }
 
-void recompute_means(point *points, mean *means){ // recompute means for each cluster
+void recompute_means(){ // recompute means for each cluster
+	
+	point *points = pointsPtr;
+	mean *means = meansPtr;
 	int meanIndex;
 
 	for(int i=0;i<k;i++){
@@ -111,7 +120,9 @@ void recompute_means(point *points, mean *means){ // recompute means for each cl
 	return;
 }
 
-void printPoints(point *points){
+void printPoints(){
+	point *points = pointsPtr;
+
 	cout<<"\nPoints\n";
 	for(int i=0;i<n;i++){
 		cout<<points[i].x<<" "<<points[i].y<<" "<<points[i].z<<" "<<points[i].cluster<<endl;
@@ -122,7 +133,9 @@ void printPoints(point *points){
 	}
 }
 
-void printMeans(mean *means){
+void printMeans(){
+	mean *means = meansPtr;
+
 	cout<<"\nK means\n";
 	for(int i=0;i<k;i++){
 		cout<<means[i].x<<" "<<means[i].y<<" "<<means[i].z<<" "<<means[i].count<<endl;
@@ -134,8 +147,8 @@ void printMeans(mean *means){
 }
 
 int main(int argc, char *argv[]){
-	srand (time(NULL));
-	// srand(2);
+	// srand (time(NULL));
+	srand(2);
 
 	int maxIterations, thresNumChanges, numThreads;
 	cout<<"Enter K\n";
@@ -145,6 +158,9 @@ int main(int argc, char *argv[]){
 	cin>>n;
 	point points[n];// 4th dim - cluster number
 	mean means[k];// 4th dim - no. of points in cluster
+
+	pointsPtr = points;
+	meansPtr = means;
 
 	//reading points
 	for(int i=0;i<n;i++){
@@ -168,7 +184,7 @@ int main(int argc, char *argv[]){
 	// pthread_t threads[numThreads];
 	// pthread_mutex_init(&lock, NULL);
 
-	maxIterations = 20;
+	maxIterations = 200;
 	thresNumChanges = 0;
 	for(int i=0;i<maxIterations;i++){
 		// cout<<"\n\niter "<<i+1<<endl;
@@ -183,19 +199,19 @@ int main(int argc, char *argv[]){
   // 			pthread_join(count3s_thr[i], NULL);
 		// }
 
-		assign_points_t(points,means);
-		// printPoints(points);
+		assign_points_t();
+		// printPoints();
 
 		// if(assign_points_t(points,means) <= thresNumChanges){
 		// 	cout<<"ended at numIter = "<<i+1<<endl;
 		// 	break;
 		// }
-		recompute_means(points,means);
+		recompute_means();
 	}
 
 	// end = omp_get_wtime();
-	printPoints(points);
-	printMeans(means);
+	// printPoints();
+	printMeans();
 	// cout<<"time = "<<end-start<<endl;
 
 	return 0;

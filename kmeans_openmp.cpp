@@ -7,7 +7,6 @@
 #include<omp.h>
 using namespace std;
 
-// pthread_mutex_t lock;
 int n;
 int k;
 int lengthPerThread;
@@ -26,20 +25,17 @@ struct mean{
 point *pointsPtr;
 mean *meansPtr;
 
-int assign_points_t(){ // assigns points to means as 4th dimension
-	cerr<<omp_get_thread_num()<<endl;
-	int t= omp_get_thread_num();
+void assign_points_t(){ // assigns points to means as 4th dimension
 
 	point *points = pointsPtr;
 	mean *means = meansPtr;
 
-	float temp, tempDist, minDist, minDistIndex;
-	int numChanges = 0;
-
 	#pragma omp parallel for
-	for(int i=t*lengthPerThread ;i<(t+1)*lengthPerThread && i<n ;i++){
-		minDist=INT_MAX;
-		minDistIndex=-1;
+	for(int i=0 ;i<n ;i++){
+
+		float minDist=INT_MAX;
+		float minDistIndex=-1;
+		float temp, tempDist;
 		for(int j=0;j<k;j++){
 
 			// cerr<<"point"<<i+1<<"\t"<<points[i].x<<" "<<points[i].y<<" "<<points[i].z<<"\t\tmean"<<j+1<<" "<<means[i].x<<" "<<means[i].y<<" "<<means[i].z<<"\t";
@@ -53,13 +49,6 @@ int assign_points_t(){ // assigns points to means as 4th dimension
 			temp = points[i].z - means[j].z;
 			tempDist += temp*temp;
 
-			// cerr << tempDist <<endl;
-			
-			// for(int k=0;k<3;k++){
-			// 	temp=points[i][k]-means[j][k];
-			// 	tempDist += temp*temp;
-			// }
-
 			if(tempDist<minDist){
 				minDist=tempDist;
 				minDistIndex=j;
@@ -68,16 +57,18 @@ int assign_points_t(){ // assigns points to means as 4th dimension
 
 		if(minDistIndex!=points[i].cluster){
 			points[i].cluster=minDistIndex;
-			numChanges++;
+			// numChanges++;
 		}
-
-		// cerr << minDistIndex<< " ";
 	}
+	// for(int i=0;i<10;i++){
+	// 	cerr<<"threadID="<<omp_get_thread_num()<<"\ti="<<i;
+	// 	cerr<<"hello\n";
+	// }
 	#pragma omp barrier
 	// cerr<<endl;
 	// }
 
-	return numChanges;
+	// return numChanges;
 }
 
 void recompute_means(){ // recompute means for each cluster
@@ -89,12 +80,9 @@ void recompute_means(){ // recompute means for each cluster
 	for(int i=0;i<k;i++){
 		means[i].count=0;
 	}
-	// cerr << "check1\n";
 
 	for(int i=0;i<n;i++){
-		// cerr << "check2 " << i <<endl;
 		meanIndex = points[i].cluster;
-		// cerr<<meanIndex<<endl;
 		means[meanIndex].x=0;
 		means[meanIndex].y=0;
 		means[meanIndex].z=0;
@@ -102,7 +90,6 @@ void recompute_means(){ // recompute means for each cluster
 		// 	means[meanIndex][j] = 0;
 		// }
 	}
-	// cerr << "check3\n";
 
 	for(int i=0;i<n;i++){
 		meanIndex = points[i].cluster;
@@ -127,7 +114,6 @@ void recompute_means(){ // recompute means for each cluster
 		// 	means[i][j]/=means[i][3];
 		// }
 	}
-	cerr<<"returning from recomp\n";
 	// return;
 }
 
@@ -161,7 +147,7 @@ int main(int argc, char *argv[]){
 	// srand (time(NULL));
 	srand(3);
 
-	int maxIterations, thresNumChanges, numThreads;
+	int maxIterations, thresNumChanges;
 	cout<<"Enter K\n";
 	cin>>k;
 	
@@ -170,7 +156,7 @@ int main(int argc, char *argv[]){
 	point points[n];// 4th dim - cluster number
 	mean means[k];// 4th dim - no. of points in cluster
 	
-	numThreads = 4;
+	numThreads = 1;
 	lengthPerThread = (n / numThreads) + 1;
 	omp_set_dynamic(0);     // Explicitly disable dynamic teams
 	omp_set_num_threads(numThreads);
@@ -186,7 +172,7 @@ int main(int argc, char *argv[]){
 		points[i].cluster=0;
 	}
 
-	// random_shuffle(&points[0],&points[n]);
+	random_shuffle(&points[0],&points[n]);
 	// initialising means
 	for(int i=0; i<k; i++){
 		// means[i][j]=rand()%50;
@@ -201,23 +187,14 @@ int main(int argc, char *argv[]){
 	// pthread_t threads[numThreads];
 	// pthread_mutex_init(&lock, NULL);
 
-	maxIterations = 200;
+	maxIterations = 10;
 	thresNumChanges = 0;
 	for(int i=0;i<maxIterations;i++){
-		cout<<"iter "<<i+1<<endl;
+		// cout<<"iter "<<i+1<<endl;
 		// printPoints(points);
 		// printMeans(means);
 
-		// for(int t=0;t<numThreads;t++){
-		// 	pthread_create(&threads[t], NULL, assign_points_t, t, );
-		// }
-	
-		// for (int t=0; t<numThreads; t++){
-  // 			pthread_join(count3s_thr[i], NULL);
-		// }
-
 		assign_points_t();
-		cerr<<"done asg\n";
 		// printPoints();
 
 		// if(assign_points_t(points,means) <= thresNumChanges){
@@ -225,7 +202,6 @@ int main(int argc, char *argv[]){
 		// 	break;
 		// }
 		recompute_means();
-		cerr<<"done recomp\n";
 	}
 
 	end = omp_get_wtime();

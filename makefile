@@ -7,8 +7,8 @@ pthread:
 	./kmeans_pthread.out < in.txt
 
 openmp:
-	g++ kmeans_openmp.cpp -o kmeans_openmp
-	./kmeans_openmp.out < in.txt
+	g++ kmeans_openmp.cpp -o kmeans_openmp.out -fopenmp
+	./kmeans_openmp.out < in3.txt
 
 clean:
 	rm *.out

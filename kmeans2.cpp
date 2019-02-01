@@ -184,7 +184,7 @@ int main(int argc, char *argv[]){
 	// pthread_t threads[numThreads];
 	// pthread_mutex_init(&lock, NULL);
 
-	maxIterations = 200;
+	maxIterations = 100;
 	thresNumChanges = 0;
 	for(int i=0;i<maxIterations;i++){
 		// cout<<"\n\niter "<<i+1<<endl;

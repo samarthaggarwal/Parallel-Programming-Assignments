@@ -153,16 +153,19 @@ void printMeans(){
 }
 
 int main(int argc, char *argv[]){
+	double start, end;
+	start = omp_get_wtime();
+	
 	// srand (time(NULL));
 	srand(2);
 
-	int maxIterations, thresNumChanges, numThreads;
+	int maxIterations, thresNumChanges;
 	cout<<"Enter K\n";
 	cin>>k;
 	
 	cout<<"Enter number of points\n";
 	cin>>n;
-	numThreads = 2;
+	numThreads = 1;
 	lengthPerThread = (n/numThreads) + 1;
 	point points[n];// 4th dim - cluster number
 	mean means[k];// 4th dim - no. of points in cluster
@@ -186,8 +189,6 @@ int main(int argc, char *argv[]){
 		means[i].z=points[i].z;
 	}
 
-	double start, end;
-	start = omp_get_wtime();
 
 	pthread_t threads[numThreads];
 	pthread_mutex_init(&lock, NULL);
@@ -197,7 +198,7 @@ int main(int argc, char *argv[]){
 		tid[t]=t;
 	}
 
-	maxIterations = 200;
+	maxIterations = 100;
 	// thresNumChanges = 0;
 	for(int i=0;i<maxIterations;i++){
 		// cout<<"\n\niter "<<i+1<<endl;
@@ -209,7 +210,7 @@ int main(int argc, char *argv[]){
 		}
 	
 		for (int t=0; t<numThreads; t++){
-  			pthread_join(threads[i], NULL);
+  			pthread_join(threads[t], NULL);
 		}
 
 		// assign_points_t();
@@ -222,9 +223,10 @@ int main(int argc, char *argv[]){
 		recompute_means();
 	}
 
-	end = omp_get_wtime();
-	// printPoints();
 	printMeans();
+	// printPoints();
+
+	end = omp_get_wtime();
 	cout<<"time = "<<end-start<<endl;
 
 	return 0;

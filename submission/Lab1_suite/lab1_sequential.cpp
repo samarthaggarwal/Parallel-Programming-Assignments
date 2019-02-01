@@ -1,3 +1,4 @@
+#include "lab1_sequential.h"
 #include<iostream>
 #include<stdlib.h>
 #include<time.h>
@@ -7,10 +8,9 @@
 #include<omp.h>
 using namespace std;
 
+// pthread_mutex_t lock;
 int n;
 int k;
-int lengthPerThread;
-int numThreads;
 
 struct point{
 	int x,y,z;
@@ -25,17 +25,17 @@ struct mean{
 point *pointsPtr;
 mean *meansPtr;
 
-void assign_points_t(){ // assigns points to means as 4th dimension
+int assign_points_t(){ // assigns points to means as 4th dimension
 
 	point *points = pointsPtr;
 	mean *means = meansPtr;
 
-	#pragma omp parallel for
-	for(int i=0 ;i<n ;i++){
+	float temp, tempDist, minDist, minDistIndex;
+	int numChanges = 0;
 
-		float minDist=INT_MAX;
-		float minDistIndex=-1;
-		float temp, tempDist;
+	for(int i=0;i<n;i++){
+		minDist=INT_MAX;
+		minDistIndex=-1;
 		for(int j=0;j<k;j++){
 
 			// cerr<<"point"<<i+1<<"\t"<<points[i].x<<" "<<points[i].y<<" "<<points[i].z<<"\t\tmean"<<j+1<<" "<<means[i].x<<" "<<means[i].y<<" "<<means[i].z<<"\t";
@@ -49,6 +49,13 @@ void assign_points_t(){ // assigns points to means as 4th dimension
 			temp = points[i].z - means[j].z;
 			tempDist += temp*temp;
 
+			// cerr << tempDist <<endl;
+			
+			// for(int k=0;k<3;k++){
+			// 	temp=points[i][k]-means[j][k];
+			// 	tempDist += temp*temp;
+			// }
+
 			if(tempDist<minDist){
 				minDist=tempDist;
 				minDistIndex=j;
@@ -57,18 +64,14 @@ void assign_points_t(){ // assigns points to means as 4th dimension
 
 		if(minDistIndex!=points[i].cluster){
 			points[i].cluster=minDistIndex;
-			// numChanges++;
+			numChanges++;
 		}
-	}
-	// for(int i=0;i<10;i++){
-	// 	cerr<<"threadID="<<omp_get_thread_num()<<"\ti="<<i;
-	// 	cerr<<"hello\n";
-	// }
-	#pragma omp barrier
-	// cerr<<endl;
-	// }
 
-	// return numChanges;
+		// cerr << minDistIndex<< " ";
+	}
+	// cerr<<endl;
+
+	return numChanges;
 }
 
 void recompute_means(){ // recompute means for each cluster
@@ -78,7 +81,7 @@ void recompute_means(){ // recompute means for each cluster
 	int meanIndex;
 
 	for(int i=0;i<k;i++){
-		means[i].count=0;
+		means[i].count=(float)0;
 	}
 
 	for(int i=0;i<n;i++){
@@ -114,7 +117,8 @@ void recompute_means(){ // recompute means for each cluster
 		// 	means[i][j]/=means[i][3];
 		// }
 	}
-	// return;
+
+	return;
 }
 
 void printPoints(){
@@ -143,11 +147,12 @@ void printMeans(){
 	}
 }
 
-int main(int argc, char *argv[]){
-	// srand (time(NULL));
-	srand(3);
+void kmeans_sequential(int N, int K, int* data_points, int** data_point_cluster, float** centroids, int* num_iterations){
+	
+	srand (time(NULL));
+	// srand(2);
 
-	int maxIterations, thresNumChanges;
+	int maxIterations, thresNumChanges, numThreads;
 	cout<<"Enter K\n";
 	cin>>k;
 	
@@ -155,11 +160,6 @@ int main(int argc, char *argv[]){
 	cin>>n;
 	point points[n];// 4th dim - cluster number
 	mean means[k];// 4th dim - no. of points in cluster
-	
-	numThreads = 8;
-	lengthPerThread = (n / numThreads) + 1;
-	omp_set_dynamic(0);     // Explicitly disable dynamic teams
-	omp_set_num_threads(numThreads);
 
 	pointsPtr = points;
 	meansPtr = means;
@@ -169,7 +169,6 @@ int main(int argc, char *argv[]){
 		cin>>points[i].x;
 		cin>>points[i].y;
 		cin>>points[i].z;
-		points[i].cluster=0;
 	}
 
 	random_shuffle(&points[0],&points[n]);
@@ -190,9 +189,17 @@ int main(int argc, char *argv[]){
 	maxIterations = 100;
 	thresNumChanges = 0;
 	for(int i=0;i<maxIterations;i++){
-		// cout<<"iter "<<i+1<<endl;
+		// cout<<"\n\niter "<<i+1<<endl;
 		// printPoints(points);
 		// printMeans(means);
+
+		// for(int t=0;t<numThreads;t++){
+		// 	pthread_create(&threads[t], NULL, assign_points_t, t, );
+		// }
+	
+		// for (int t=0; t<numThreads; t++){
+  // 			pthread_join(count3s_thr[i], NULL);
+		// }
 
 		assign_points_t();
 		// printPoints();

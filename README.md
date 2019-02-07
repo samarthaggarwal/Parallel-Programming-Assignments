@@ -5,7 +5,7 @@ COL380 - lab1
 1. add readme containing flags reqd for compilation
 
 ### Seq:
-- [ ] - pthreads - done variable (array) to sync instead of spawning and killing threads
+- [ ] pthreads - done variable (array) to sync instead of spawning and killing threads
 
 
 ### Report:

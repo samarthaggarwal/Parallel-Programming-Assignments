@@ -169,8 +169,8 @@ void kmeans_omp(int num_threads, int N, int K, int* data_points, int** data_poin
 	double start, end;
 	start = omp_get_wtime();
 
-	// srand (time(NULL));
-	srand(3);
+	srand (time(NULL));
+	// srand(3);
 
 	int maxIterations = 100;
 	// cout<<"Enter K\n";

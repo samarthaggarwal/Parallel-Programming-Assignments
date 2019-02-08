@@ -21,16 +21,17 @@ elif [[ $1 = "pth" ]]; then
 	elif [[ $2 -eq 50 ]]; then
 		./a.out 4 $3 testing/test50.txt outputs/points.txt outputs/centres.txt
 	elif [[ $2 = "1l" ]]; then
-		./a.out 10 $3 testing/test1l.txt outputs/points.txt outputs/centres.txt
+		./a.out 7 $3 testing/test1l.txt outputs/points.txt outputs/centres.txt
 	fi
 
 elif [[ $1 = "omp" ]]; then
+	g++ -fopenmp -pthread src/main_omp.c src/lab1_omp.cpp src/lab1_io.c
 	if [[ $2 -eq 5 ]]; then
-		./a.out 3 testing/test5.txt outputs/points.txt outputs/centres.txt
+		./a.out 3 $3 testing/test5.txt outputs/points.txt outputs/centres.txt
 	elif [[ $2 -eq 50 ]]; then
-		./a.out 4 testing/test50.txt outputs/points.txt outputs/centres.txt
+		./a.out 4 $3 testing/test50.txt outputs/points.txt outputs/centres.txt
 	elif [[ $2 = "1l" ]]; then
-		./a.out 7 testing/test1l.txt outputs/points.txt outputs/centres.txt
+		./a.out 7 $3 testing/test1l.txt outputs/points.txt outputs/centres.txt
 	fi
 
 fi

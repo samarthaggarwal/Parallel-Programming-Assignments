@@ -6,7 +6,7 @@ from sklearn.utils import shuffle
 
 num_range = 1000             # base range of data point cordinates
 total_points = 100000          # total number of data points
-noise = 500             # data points that are not generated near a blob_center
+noise = 5          # data points that are not generated near a blob_center
 K = 7                       # number of blobs
 N = total_points - noise    # data points to be generated near blob_center
 

@@ -38,8 +38,8 @@ plt.title("Pthreads: Speedup vs Problem Size")
 plt.xlabel("Problem size")
 plt.ylabel("Speedup")
 # plt.show()
-plt.savefig('outputs/speedup_vs_probSize_pthread.png')
-plt.close()
+# plt.savefig('outputs/speedup_vs_probSize_pthread.png')
+# plt.close()
 
 for i in range(len(pthread)):
 	pthread[i] /= 4
@@ -49,8 +49,8 @@ plt.title("Pthreads: Efficiency vs Problem Size")
 plt.xlabel("Problem size")
 plt.ylabel("Efficiency")
 # plt.show()
-plt.savefig('outputs/efficiency_vs_probSize_pthread.png')
-plt.close()
+# plt.savefig('outputs/efficiency_vs_probSize_pthread.png')
+# plt.close()
 
 #omp
 plt.plot(range(1000,1000*len(omp)+1,1000), omp, marker=".")
@@ -59,8 +59,8 @@ plt.title("OMP: Speedup vs Problem Size")
 plt.xlabel("Problem size(N)")
 plt.ylabel("Speedup")
 # plt.show()
-plt.savefig('outputs/speedup_vs_probSize_omp.png')
-plt.close()
+# plt.savefig('outputs/speedup_vs_probSize_omp.png')
+# plt.close()
 
 for i in range(len(omp)):
 	omp[i] /= 4
@@ -70,8 +70,12 @@ plt.title("OMP: Efficiency vs Problem Size")
 plt.xlabel("Problem size(N)")
 plt.ylabel("Efficiency")
 # plt.show()
-plt.savefig('outputs/efficiency_vs_probSize_omp.png')
-plt.close()
+# plt.savefig('outputs/efficiency_vs_probSize_omp.png')
+# plt.close()
 
+# to plot single graph with all plots
+plt.title("Variation with Problem Size")
+plt.ylabel("Speedup / Efficiency")
+plt.savefig('outputs/probSize_variation.png')
 
 

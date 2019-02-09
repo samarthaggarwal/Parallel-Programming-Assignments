@@ -43,8 +43,10 @@ plt.grid()
 plt.title("Pthreads: Speedup vs Number of threads")
 plt.xlabel("Number of threads")
 plt.ylabel("Speedup")
-plt.show()
-# plt.savefig('outputs/speedup_vs_threads_pthread.png')
+# plt.show()
+plt.savefig('outputs/speedup_vs_threads_pthread.png')
+plt.close()
+
 
 for i in range(len(pthread)):
 	pthread[i] /= i+1
@@ -53,8 +55,9 @@ plt.grid()
 plt.title("Pthreads: Efficiency vs Number of threads")
 plt.xlabel("Number of threads")
 plt.ylabel("Efficiency")
-plt.show()
-# plt.savefig('outputs/efficiency_vs_threads_pthread.png')
+# plt.show()
+plt.savefig('outputs/efficiency_vs_threads_pthread.png')
+plt.close()
 
 #omp
 plt.plot(range(1,len(omp)+1), omp, marker=".")
@@ -62,8 +65,9 @@ plt.grid()
 plt.title("OMP: Speedup vs Number of threads")
 plt.xlabel("Number of threads")
 plt.ylabel("Speedup")
-plt.show()
-# plt.savefig('outputs/speedup_vs_threads_omp.png')
+# plt.show()
+plt.savefig('outputs/speedup_vs_threads_omp.png')
+plt.close()
 
 for i in range(len(omp)):
 	omp[i] /= i+1
@@ -72,7 +76,7 @@ plt.grid()
 plt.title("OMP: Efficiency vs Number of threads")
 plt.xlabel("Number of threads")
 plt.ylabel("Efficiency")
-plt.show()
-# plt.savefig('outputs/efficiency_vs_threads_omp.png')
-
+# plt.show()
+plt.savefig('outputs/efficiency_vs_threads_omp.png')
+plt.close()
 

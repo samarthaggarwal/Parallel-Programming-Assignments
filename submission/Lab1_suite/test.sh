@@ -11,7 +11,7 @@ if [[ $1 = "seq" ]]; then
 	elif [[ $2 -eq 50 ]]; then
 		./a.out 4 testing/test50.txt outputs/points.txt outputs/centres.txt
 	elif [[ $2 = "1l" ]]; then
-		./a.out 7 testing/test1l.txt outputs/points.txt outputs/centres.txt
+		./a.out 10 testing/dataset_70000_10.txt outputs/points.txt outputs/centres.txt
 	fi
 
 elif [[ $1 = "pth" ]]; then
@@ -21,7 +21,7 @@ elif [[ $1 = "pth" ]]; then
 	elif [[ $2 -eq 50 ]]; then
 		./a.out 4 $3 testing/test50.txt outputs/points.txt outputs/centres.txt
 	elif [[ $2 = "1l" ]]; then
-		./a.out 7 $3 testing/test1l.txt outputs/points.txt outputs/centres.txt
+		./a.out 10 $3 testing/dataset_70000_10.txt outputs/points.txt outputs/centres.txt
 	fi
 
 elif [[ $1 = "omp" ]]; then
@@ -31,7 +31,7 @@ elif [[ $1 = "omp" ]]; then
 	elif [[ $2 -eq 50 ]]; then
 		./a.out 4 $3 testing/test50.txt outputs/points.txt outputs/centres.txt
 	elif [[ $2 = "1l" ]]; then
-		./a.out 7 $3 testing/test1l.txt outputs/points.txt outputs/centres.txt
+		./a.out 10 $3 testing/dataset_70000_10.txt outputs/points.txt outputs/centres.txt
 	fi
 
 fi

@@ -175,10 +175,10 @@ double cost(){
 
 void kmeans_pthread(int num_threads, int N, int K, int* data_points, int** data_point_cluster, float** centroids, int* num_iterations){
 
-	double start, end;
-	start = omp_get_wtime();
+	// double start, end;
+	// start = omp_get_wtime();
 	
-	srand (time(NULL));
+	// srand (time(NULL));
 	// srand(2);
 
 	int maxIterations = 100;
@@ -219,7 +219,7 @@ void kmeans_pthread(int num_threads, int N, int K, int* data_points, int** data_
 	// 	cin>>points[i].z;
 	// }
 
-	random_shuffle(&points[0],&points[n]);
+	// random_shuffle(&points[0],&points[n]);
 	// initialising means
 	for(int i=0; i<k; i++){
 		// means[i][j]=rand()%50;
@@ -287,7 +287,7 @@ void kmeans_pthread(int num_threads, int N, int K, int* data_points, int** data_
 	// printMeans();
 	// printPoints();
 
-	cout << *num_iterations<<endl;
+	// cout << *num_iterations<<endl;
 	// writing centroid after last recomputation
 	for(int i=0;i<k;i++){
 		*(base + (*centroids) + 3*i + 0) = (float)means[i].x;
@@ -306,9 +306,9 @@ void kmeans_pthread(int num_threads, int N, int K, int* data_points, int** data_
 		*(outputPoints + 4*i + 3) = points[i].cluster;
 	}
 
-	end = omp_get_wtime();
-	cout<<"time = "<<end-start<<endl;
-	cout<<"cost = "<<cost()<<endl;
+	// end = omp_get_wtime();
+	// cout<<"time = "<<end-start<<endl;
+	// cout<<"cost = "<<cost()<<endl;
 
 	return;
 }

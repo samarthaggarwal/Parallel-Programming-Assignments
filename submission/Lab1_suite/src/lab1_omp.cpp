@@ -34,6 +34,8 @@ void assign_points_t(){ // assigns points to means as 4th dimension
 	#pragma omp parallel for
 	for(int i=0 ;i<n ;i++){
 
+		// cerr << omp_get_thread_num() << endl;
+		
 		float minDist=INT_MAX;
 		float minDistIndex=-1;
 		float temp, tempDist;
@@ -161,15 +163,15 @@ double cost(){
 		cost += tempDist;
 	}
 
-	return cost;
+	return sqrt(cost);
 }
 
 void kmeans_omp(int num_threads, int N, int K, int* data_points, int** data_point_cluster, float** centroids, int* num_iterations){
 	
-	double start, end;
-	start = omp_get_wtime();
+	// double start, end;
+	// start = omp_get_wtime();
 
-	srand (time(NULL));
+	// srand (time(NULL));
 	// srand(3);
 
 	int maxIterations = 100;
@@ -214,7 +216,7 @@ void kmeans_omp(int num_threads, int N, int K, int* data_points, int** data_poin
 	// 	cin>>points[i].z;
 	// }
 
-	random_shuffle(&points[0],&points[n]);
+	// random_shuffle(&points[0],&points[n]);
 	// initialising means
 	for(int i=0; i<k; i++){
 		// means[i][j]=rand()%50;
@@ -269,7 +271,8 @@ void kmeans_omp(int num_threads, int N, int K, int* data_points, int** data_poin
 		}
 	}
 
-	cout << *num_iterations<<endl;
+	// cout << *num_iterations<<endl;
+
 	// writing centroid after last recomputation
 	for(int i=0;i<k;i++){
 		*(base + (*centroids) + 3*i + 0) = (float)means[i].x;
@@ -288,11 +291,12 @@ void kmeans_omp(int num_threads, int N, int K, int* data_points, int** data_poin
 		*(outputPoints + 4*i + 3) = points[i].cluster;
 	}
 
-	end = omp_get_wtime();
+	// end = omp_get_wtime();
 	// printPoints();
 	// printMeans();
-	cout<<"time = "<<end-start<<endl;
-	cout<<"cost = "<<cost()<<endl;
+
+	// cout<<"time = "<<end-start<<endl;
+	// cout<<"cost = "<<cost()<<endl;
 
 	return;
 }

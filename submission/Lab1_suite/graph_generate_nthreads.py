@@ -28,14 +28,15 @@ for line in f.readlines():
 		omp.append(seq/float(line[0]))
 	ctr+=1
 
-# for p in range(1,10):
-# 	print(pthread[p])
-# 	print(omp[p])
-# 	s = pthread[p-1]
-# 	print( "f = " + str(( (1/s)-(1/(p+1)) )/( 1 - (1/(p+1)) ) ) )
-# 	s = omp[p-1]
-# 	print( "f = " + str(( (1/s)-(1/(p+1)) )/( 1 - (1/(p+1)) ) ) )
+for p in range(1,10):
+	print(pthread[p])
+	print(omp[p])
+	s = pthread[p-1]
+	print( "f = " + str(( (1/s)-(1/(p+1)) )/( 1 - (1/(p+1)) ) ) )
+	s = omp[p-1]
+	print( "f = " + str(( (1/s)-(1/(p+1)) )/( 1 - (1/(p+1)) ) ) )
 
+exit(0)
 
 #pthreads
 plt.plot(range(1,len(pthread)+1), pthread, marker=".")

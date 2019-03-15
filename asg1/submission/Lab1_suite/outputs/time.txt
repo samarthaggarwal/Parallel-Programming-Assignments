@@ -1,0 +1,33 @@
+testing seq
+Time Taken: 0.178046 
+
+===============
+
+testing pth
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+
+===============
+
+testing omp
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+Time Taken:  
+
+===============
+

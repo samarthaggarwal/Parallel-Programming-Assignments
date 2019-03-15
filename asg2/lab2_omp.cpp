@@ -112,6 +112,13 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 	printf("\n");
 */
 // QR decomposition
+	float q[N][N];	
+	float q2[N][N];
+	float r[N][N];
+	float e[N][N];
+	float temp[N];
+	float dot,normSquared,norm;
+
 	cout<<"A\n";
 	for(int i=0;i<N;i++){
 		for(int j=0;j<N;j++){
@@ -120,28 +127,27 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 		}
 		printf("\n");
 	}
+	printf("\n");
 
-	cout<<"transposing A\n";
+	// cout<<"transposing A\n";
 	for(int i=0;i<N;i++){
 		for(int j=0;j<N;j++){
 			a[i][j]=dTranspose[i][j];
+			e[i][j]=0;
 		}
+		e[i][i]=1;
 	}
 
-	cout<<"A transpose\n";
-	for(int i=0;i<N;i++){
-		for(int j=0;j<N;j++){
-			// printf("%d %d \t\t", i,j);
-			printf("%.0f\t", a[i][j] );
-		}
-		printf("\n");
-	}
-	printf("\n");
-	float q[N][N];
-	float q2[N][N];
-	float r[N][N];
-	float temp[N];
-	float dot,normSquared,norm;
+	// cout<<"A transpose\n";
+	// for(int i=0;i<N;i++){
+	// 	for(int j=0;j<N;j++){
+	// 		// printf("%d %d \t\t", i,j);
+	// 		printf("%.0f\t", a[i][j] );
+	// 	}
+	// 	printf("\n");
+	// }
+
+
 
 	for(int i=0;i<N;i++){
 		// cout<<"i="<<i<<endl;
@@ -165,46 +171,30 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 		// cout<<"updated q[i] as ";
 		// print_vector(q[i],N);
 
-		// norm=sqrt(dot_product(q[i],q[i],N));
-		// for(int j=0;j<N;j++){
-		// 	q[i][j]/=norm;
-		// }
-	}
-	
-	cout<<"U transpose\n";
-	for(int i=0;i<N;i++){
-		for(int j=0;j<N;j++){
-			// printf("%d %d \t\t", i,j);
-			printf("%f\t", q[i][j] );
-		}
-		printf("\n");
-	}
-	printf("\n");
-
-	cerr<<"normalising\n";
-	for(int i=0;i<N;i++){
 		norm=sqrt(dot_product(q[i],q[i],N));
 		for(int j=0;j<N;j++){
 			q[i][j]/=norm;
 		}
 	}
+	
+	// cout<<"U transpose\n";
+	// for(int i=0;i<N;i++){
+	// 	for(int j=0;j<N;j++){
+	// 		// printf("%d %d \t\t", i,j);
+	// 		printf("%f\t", q[i][j] );
+	// 	}
+	// 	printf("\n");
+	// }
+	// printf("\n");
 
-	cerr<<"transposing\n";
-	for(int i=0;i<N;i++){
-		for(int j=0;j<N;j++){
-			q2[i][j]=q[j][i];
-		}
-	}
+	// cerr<<"normalising\n";
+	// for(int i=0;i<N;i++){
+	// 	norm=sqrt(dot_product(q[i],q[i],N));
+	// 	for(int j=0;j<N;j++){
+	// 		q[i][j]/=norm;
+	// 	}
+	// }
 
-	cout<<"Q\n";
-	for(int i=0;i<N;i++){
-		for(int j=0;j<N;j++){
-			// printf("%d %d \t\t", i,j);
-			printf("%f\t", q2[i][j] );
-		}
-		printf("\n");
-	}
-	printf("\n");	
 
 	for(int i=0;i<N;i++){
 		for(int j=0;j<N;j++){
@@ -222,6 +212,24 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 		for(int j=0;j<N;j++){
 			// printf("%d %d \t\t", i,j);
 			printf("%f\t", r[i][j] );
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+	
+	// cerr<<"transposing\n";
+	for(int i=0;i<N;i++){
+		for(int j=0;j<N;j++){
+			q2[i][j]=q[j][i];
+		}
+	}
+
+	cout<<"Q\n";
+	for(int i=0;i<N;i++){
+		for(int j=0;j<N;j++){
+			// printf("%d %d \t\t", i,j);
+			printf("%f\t", q2[i][j] );
 		}
 		printf("\n");
 	}

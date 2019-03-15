@@ -1,3 +1,5 @@
+.gitignore~
+..gitignore.un~
 
 asg2/testcase/testcase*
 .DS_Store

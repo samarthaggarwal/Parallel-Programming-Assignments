@@ -20,21 +20,21 @@ using namespace std;
 // }
 
 // void print(void *mat, int a, int b){
-// 	printf("called print\n");
+// 	//printf("called print\n");
 // 	float *m[b] = (float *[m])mat;
 // 	for(int i=0;i<a;i++){
 // 		for(int j=0;j<b;j++){
-// 			printf("%d %d \t\t", i,j);
-// 			// printf("%f\n", *(*(m+i)+j) );
+// 			//printf("%d %d \t\t", i,j);
+// 			// //printf("%f\n", *(*(m+i)+j) );
 // 		}
-// 		printf("\n");
+// 		//printf("\n");
 // 	}
 // }
 
 void print_vector(double *a, int dim){
-	for(int i=0;i<dim;i++)
-		printf("%f\t", a[i]);
-	printf("\n");
+	// for(int i=0;i<dim;i++)
+		// //printf("%f\t", a[i]);
+	// //printf("\n");
 }
 
 double dot_product(double *a, double *b, int dim){
@@ -46,7 +46,7 @@ double dot_product(double *a, double *b, int dim){
 		sum+=a[i]*b[i];
 	}
 
-	// printf("dot=%f\n", sum);
+	// //printf("dot=%f\n", sum);
 	return sum;
 }
 
@@ -57,7 +57,7 @@ double dot_product(double *a, double *b, int dim){
 // */
 void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 {
-	printf("called svd\n");
+	//printf("called svd\n");
 
 	// double d[M][N];
 	double **d=(double**)malloc(sizeof(double*)*M);
@@ -82,22 +82,22 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 // print d
 	// for(int i=0;i<M;i++){
 	// 	for(int j=0;j<N;j++){
-	// 		// printf("%d %d \t\t", i,j);
-	// 		printf("%.0f\t", d[i][j] );
+	// 		// //printf("%d %d \t\t", i,j);
+	// 		//printf("%.0f\t", d[i][j] );
 	// 	}
-	// 	printf("\n");
+	// 	//printf("\n");
 	// }
-	// printf("\n");
+	// //printf("\n");
 
 // print dTranspose
 	// for(int i=0;i<M;i++){
 	// 	for(int j=0;j<N;j++){
-	// 		// printf("%d %d \t\t", i,j);
-	// 		printf("%.0f\t", dTranspose[i][j] );
+	// 		// //printf("%d %d \t\t", i,j);
+	// 		//printf("%.0f\t", dTranspose[i][j] );
 	// 	}
-	// 	printf("\n");
+	// 	//printf("\n");
 	// }
-	// printf("\n");
+	// //printf("\n");
 
 // calc dTd
 	for (int i=0;i<N;i++){
@@ -112,12 +112,12 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 // print dTd
 	// for(int i=0;i<N;i++){
 	// 	for(int j=0;j<N;j++){
-	// 		// printf("%d %d \t\t", i,j);
-	// 		printf("%.0f\t", a[i][j] );
+	// 		// //printf("%d %d \t\t", i,j);
+	// 		//printf("%.0f\t", a[i][j] );
 	// 	}
-	// 	printf("\n");
+	// 	//printf("\n");
 	// }
-	// printf("\n");
+	// //printf("\n");
 
 // QR decomposition
 	// double q[N][N];
@@ -161,12 +161,12 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 	// cout<<"A\n";
 	// for(int i=0;i<N;i++){
 	// 	for(int j=0;j<N;j++){
-	// 		// printf("%d %d \t\t", i,j);
-	// 		printf("%.0f\t", d[i][j] );
+	// 		// //printf("%d %d \t\t", i,j);
+	// 		//printf("%.0f\t", d[i][j] );
 	// 	}
-	// 	printf("\n");
+	// 	//printf("\n");
 	// }
-	// printf("\n");
+	// //printf("\n");
 
 	// cout<<"transposing A\n";
 	for(int i=0;i<N;i++){
@@ -180,10 +180,10 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 	// cout<<"A transpose\n";
 	// for(int i=0;i<N;i++){
 	// 	for(int j=0;j<N;j++){
-	// 		// printf("%d %d \t\t", i,j);
-	// 		printf("%.0f\t", a[i][j] );
+	// 		// //printf("%d %d \t\t", i,j);
+	// 		//printf("%.0f\t", a[i][j] );
 	// 	}
-	// 	printf("\n");
+	// 	//printf("\n");
 	// }
 
 	int numIter=0;
@@ -220,12 +220,12 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 		// cout<<"U transpose\n";
 		// for(int i=0;i<N;i++){
 		// 	for(int j=0;j<N;j++){
-		// 		// printf("%d %d \t\t", i,j);
-		// 		printf("%f\t", q[i][j] );
+		// 		// //printf("%d %d \t\t", i,j);
+		// 		//printf("%f\t", q[i][j] );
 		// 	}
-		// 	printf("\n");
+		// 	//printf("\n");
 		// }
-		// printf("\n");
+		// //printf("\n");
 
 		// cerr<<"normalising\n";
 		// for(int i=0;i<N;i++){
@@ -247,15 +247,15 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 			}
 		}
 
-		cout<<"R transpose\n";
+		// cout<<"R transpose\n";
 		for(int i=0;i<N;i++){
 			for(int j=0;j<N;j++){
-				// printf("%d %d \t\t", i,j);
-				printf("%f\t", r[i][j] );
+				// //printf("%d %d \t\t", i,j);
+				//printf("%f\t", r[i][j] );
 			}
-			printf("\n");
+			//printf("\n");
 		}
-		printf("\n");
+		//printf("\n");
 
 		for(int i=0;i<N;i++){
 			for(int j=0;j<N;j++){
@@ -278,10 +278,12 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 		}
 
 		numIter++;
-		cout<<"iter = "<<numIter << "\tmaxDiff="<<maxDiff<<endl;
-	}while(maxDiff > 0.00001);
+		// cout<<"iter = "<<numIter << "\tmaxDiff="<<maxDiff<<endl;
+	}while(maxDiff > 0.000000001);
 
-	cout<<"numIter = "<<numIter<<endl;
+	// cout<<"numIter = "<<numIter<<endl;
+	cout<<"iter = "<<numIter << "\tmaxDiff="<<maxDiff<<endl;
+
 
 	// cerr<<"transposing\n";
 	for(int i=0;i<N;i++){
@@ -293,12 +295,12 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 	cout<<"Q\n";
 	for(int i=0;i<N;i++){
 		for(int j=0;j<N;j++){
-			// printf("%d %d \t\t", i,j);
-			printf("%f\t", q2[i][j] );
+			// //printf("%d %d \t\t", i,j);
+			//printf("%f\t", q2[i][j] );
 		}
-		printf("\n");
+		//printf("\n");
 	}
-	printf("\n");
+	//printf("\n");
 
 // eUpdated has eTranspose now
 	for(int i=0;i<N;i++){
@@ -327,18 +329,18 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 		}
 	}
 
-	// printf("sigma inv\n");
+	// //printf("sigma inv\n");
 	// for(int i=0;i<N;i++){
-	// 	printf("%f\t", sigmaInv[i][i]);
+	// 	//printf("%f\t", sigmaInv[i][i]);
 	// }
-	// printf("\n");
+	// //printf("\n");
 
-	// printf("my u\n");
+	// //printf("my u\n");
 	// for(int i=0;i<M;i++){
 	// 	for(int j=0;j<N;j++){
-	// 		printf("%f\t", u[i][j]);
+	// 		//printf("%f\t", u[i][j]);
 	// 	}
-	// 	printf("\n");
+	// 	//printf("\n");
 	// }
 
 	for(int i=0;i<N;i++){
@@ -363,29 +365,29 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 	}
 
 /*
-	printf("U to be ret\n");
+	//printf("U to be ret\n");
 	for(int i=0;i<N;i++){
 		for(int j=0;j<N;j++){
-			printf("%f\t", (*U)[N*i+j]);
+			//printf("%f\t", (*U)[N*i+j]);
 		}
-		printf("\n");
+		//printf("\n");
 	}
 
-	printf("SIGMA\n");
+	//printf("SIGMA\n");
 	for(int i=0;i<N;i++){
-		printf("%f\n", *(*SIGMA +i));
+		//printf("%f\n", *(*SIGMA +i));
 	}
 
-	printf("V_T to be ret\n");
+	//printf("V_T to be ret\n");
 	for(int i=0;i<M;i++){
 		for(int j=0;j<M;j++){
-			printf("%f\t", (*V_T)[M*i+j]);
+			//printf("%f\t", (*V_T)[M*i+j]);
 		}
-		printf("\n");
+		//printf("\n");
 	}
 
 	double sam=0;
-	printf("V_T to be returned\n");
+	//printf("V_T to be returned\n");
 	for(int i=0;i<N;i++){
 		for(int j=0;j<M;j++){
 			sam=dTranspose[i][j];
@@ -393,9 +395,9 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 				sam -= eUpdated[i][k] * sigma[k][k] * (*V_T)[M*k+j];
 			}
 			if(fabs(sam) >= 0.0001 )
-				printf("i=%d j=%d temp=%f\n", i,j, sam);
+				//printf("i=%d j=%d temp=%f\n", i,j, sam);
 		}
-		// printf("\n");
+		// //printf("\n");
 	}
 */
 }
@@ -407,7 +409,7 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 // */
 void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** D_HAT, int *K)
 {
-    printf("called pca\n");
+    //printf("called pca\n");
 
     float* sigmaSorted = (float*)malloc(sizeof(float)*N);
     float sum=0, ret=retention/100.0;
@@ -417,25 +419,25 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
     	sum+=sigmaSorted[i];
     }
 
-    // printf("sigmaSorted non normalised\n");
+    // //printf("sigmaSorted non normalised\n");
     // for(int i=0;i<N;i++){
-    // 	printf("%f\n", sigmaSorted[i]);
+    // 	//printf("%f\n", sigmaSorted[i]);
     // }
-    printf("sum=%f\n", sum);
+    // //printf("sum=%f\n", sum);
 
-    printf("sigmaSorted\n");
-    for(int i=0;i<N;i++){
-    	printf("%f\n", sigmaSorted[i]);
-    }
+    // //printf("sigmaSorted\n");
+    // for(int i=0;i<N;i++){
+    // 	//printf("%f\n", sigmaSorted[i]);
+    // }
 
     for(int i=0;i<N;i++){
     	sigmaSorted[i]/=sum;
     }
 
-    printf("sigmaSorted\n");
-    for(int i=0;i<N;i++){
-    	printf("%f\n", sigmaSorted[i]);
-    }
+    // //printf("sigmaSorted\n");
+    // for(int i=0;i<N;i++){
+    // 	//printf("%f\n", sigmaSorted[i]);
+    // }
 
     sort(sigmaSorted,sigmaSorted + N,greater<int>());
 
@@ -447,15 +449,15 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
     	}
     }
 
-    printf("sigmaSorted\n");
-    for(int i=0;i<N;i++){
-    	printf("%f\n", sigmaSorted[i]);
-    }
+    // //printf("sigmaSorted\n");
+    // for(int i=0;i<N;i++){
+    // 	//printf("%f\n", sigmaSorted[i]);
+    // }
 
-    printf("SIGMA\n");
-    for(int i=0;i<N;i++){
-    	printf("%f\n", (SIGMA[i]*SIGMA[i])/sum);
-    }
+    // //printf("SIGMA\n");
+    // for(int i=0;i<N;i++){
+    // 	//printf("%f\n", (SIGMA[i]*SIGMA[i])/sum);
+    // }
 
     // float w[N][K];
 	float **w=(float**)malloc(sizeof(float*)*N);
@@ -472,13 +474,13 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
     	}
     }
 
-    printf("\nw\n\n");
-    for(int i=0;i<N;i++){
-    	for(int j=0;j<*K;j++){
-    		printf("%f\t", w[i][j]);
-    	}
-    	printf("\n");
-    }
+    // //printf("\nw\n\n");
+    // for(int i=0;i<N;i++){
+    // 	for(int j=0;j<*K;j++){
+    // 		//printf("%f\t", w[i][j]);
+    // 	}
+    // 	//printf("\n");
+    // }
 
     *D_HAT = (float*)malloc(sizeof(float)*M* *K);
     for(int i=0;i<M;i++){
@@ -492,11 +494,11 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
 
     printf("K=%d\n",*K);
 
-    printf("\nD_HAT\n\n");
-    for(int i=0;i<M;i++){
-    	for(int j=0;j<*K;j++){
-    		printf("%.6f\t", (*D_HAT)[*K *i+j]);
-    	}
-    	printf("\n");
-    }
+    // //printf("\nD_HAT\n\n");
+    // for(int i=0;i<M;i++){
+    // 	for(int j=0;j<*K;j++){
+    // 		//printf("%.6f\t", (*D_HAT)[*K *i+j]);
+    // 	}
+    // 	//printf("\n");
+    // }
 }

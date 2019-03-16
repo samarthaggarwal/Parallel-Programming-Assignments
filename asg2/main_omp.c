@@ -63,6 +63,10 @@ int main(int argc, char const *argv[])
 	// */
 	SVD(M, N, D, &U, &SIGMA, &V_T);
 
+	end_time = omp_get_wtime();
+	computation_time = ((double) (end_time - start_time));
+	printf("time = %f\n", computation_time);
+
 	// int m=2;
 	// int n=2;
 	// float d[4] = {4,0,3,-5};
@@ -81,6 +85,7 @@ int main(int argc, char const *argv[])
 	end_time = omp_get_wtime();
 	computation_time = ((double) (end_time - start_time));
 	
+	printf("time = %f\n", computation_time);
 	/*
 		--Pre-defined functions --
 		checks for correctness of results computed by SVD and PCA

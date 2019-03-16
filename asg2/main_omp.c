@@ -61,19 +61,20 @@ int main(int argc, char const *argv[])
 	// 		TODO -- You must implement these two function
 	// 	*****************************************************
 	// */
-	// SVD(M, N, D, &U, &SIGMA, &V_T);
+	SVD(M, N, D, &U, &SIGMA, &V_T);
 
 	// int m=2;
 	// int n=2;
 	// float d[4] = {4,0,3,-5};
-	int m=3;
-	int n=3;
-	float d[9] = {12,-51,4,6,167,-68,-4,24,-41};
-	float *u = (float*) malloc(sizeof(float) * N*N);
-	float *s = (float*) malloc(sizeof(float) * N);
-	float *vt = (float*) malloc(sizeof(float) * M*M);
+
+	// int m=3;
+	// int n=3;
+	// float d[9] = {12,-51,4,6,167,-68,-4,24,-41};
+	// float *u = (float*) malloc(sizeof(float) * N*N);
+	// float *s = (float*) malloc(sizeof(float) * N);
+	// float *vt = (float*) malloc(sizeof(float) * M*M);
 	
-	SVD(m,n,d, &u, &s, &vt);
+	// SVD(m,n,d, &u, &s, &vt);
 
 	PCA(retention, M, N, D, U, SIGMA, &D_HAT, &K);
 

@@ -31,17 +31,17 @@ using namespace std;
 // 	}
 // }
 
-void print_vector(float *a, int dim){
+void print_vector(double *a, int dim){
 	for(int i=0;i<dim;i++)
 		printf("%f\t", a[i]);
 	printf("\n");
 }
 
-float dot_product(float *a, float *b, int dim){
+double dot_product(double *a, double *b, int dim){
 	// cout<<"called dot_product bw\n";
 	// print_vector(a,dim);
 	// print_vector(b,dim);
-	float sum=0;
+	double sum=0;
 	for(int i=0;i<dim;i++){
 		sum+=a[i]*b[i];
 	}
@@ -59,17 +59,17 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 {
 	printf("called svd\n");
 
-	// float d[M][N];
-	float **d=(float**)malloc(sizeof(float*)*M);
-	for(int i=0;i<M;i++) d[i]=(float*)malloc(sizeof(float)*N);
+	// double d[M][N];
+	double **d=(double**)malloc(sizeof(double*)*M);
+	for(int i=0;i<M;i++) d[i]=(double*)malloc(sizeof(double)*N);
 
-	// float dTranspose[N][M];
-	float **dTranspose=(float**)malloc(sizeof(float*)*N);
-	for(int i=0;i<N;i++) dTranspose[i]=(float*)malloc(sizeof(float)*M);
+	// double dTranspose[N][M];
+	double **dTranspose=(double**)malloc(sizeof(double*)*N);
+	for(int i=0;i<N;i++) dTranspose[i]=(double*)malloc(sizeof(double)*M);
 
-	// float a[N][N];
-	float **a=(float**)malloc(sizeof(float*)*N);
-	for(int i=0;i<N;i++) a[i]=(float*)malloc(sizeof(float)*N);
+	// double a[N][N];
+	double **a=(double**)malloc(sizeof(double*)*N);
+	for(int i=0;i<N;i++) a[i]=(double*)malloc(sizeof(double)*N);
 
 // making d and dTranspose
 	for(int i=0;i<M;i++){
@@ -120,42 +120,42 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 	// printf("\n");
 
 // QR decomposition
-	// float q[N][N];
-	float **q=(float**)malloc(sizeof(float*)*N);
-	for(int i=0;i<N;i++) q[i]=(float*)malloc(sizeof(float)*N);
+	// double q[N][N];
+	double **q=(double**)malloc(sizeof(double*)*N);
+	for(int i=0;i<N;i++) q[i]=(double*)malloc(sizeof(double)*N);
 
-	// float q2[N][N];
-	float **q2=(float**)malloc(sizeof(float*)*N);
-	for(int i=0;i<N;i++) q2[i]=(float*)malloc(sizeof(float)*N);
+	// double q2[N][N];
+	double **q2=(double**)malloc(sizeof(double*)*N);
+	for(int i=0;i<N;i++) q2[i]=(double*)malloc(sizeof(double)*N);
 	
-	// float r[N][N];
-	float **r=(float**)malloc(sizeof(float*)*N);
-	for(int i=0;i<N;i++) r[i]=(float*)malloc(sizeof(float)*N);
+	// double r[N][N];
+	double **r=(double**)malloc(sizeof(double*)*N);
+	for(int i=0;i<N;i++) r[i]=(double*)malloc(sizeof(double)*N);
 
-	// float e[N][N];
-	float **e=(float**)malloc(sizeof(float*)*N);
-	for(int i=0;i<N;i++) e[i]=(float*)malloc(sizeof(float)*N);
+	// double e[N][N];
+	double **e=(double**)malloc(sizeof(double*)*N);
+	for(int i=0;i<N;i++) e[i]=(double*)malloc(sizeof(double)*N);
 
-	// float eUpdated[N][N];
-	float **eUpdated=(float**)malloc(sizeof(float*)*N);
-	for(int i=0;i<N;i++) eUpdated[i]=(float*)malloc(sizeof(float)*N);
+	// double eUpdated[N][N];
+	double **eUpdated=(double**)malloc(sizeof(double*)*N);
+	for(int i=0;i<N;i++) eUpdated[i]=(double*)malloc(sizeof(double)*N);
 
-	// float temp[N];
-	float *temp=(float*)malloc(sizeof(float*)*N);
+	// double temp[N];
+	double *temp=(double*)malloc(sizeof(double*)*N);
 
-	// float sigma[N][N];
-	float **sigma=(float**)malloc(sizeof(float*)*N);
-	for(int i=0;i<N;i++) sigma[i]=(float*)malloc(sizeof(float)*N);
+	// double sigma[N][N];
+	double **sigma=(double**)malloc(sizeof(double*)*N);
+	for(int i=0;i<N;i++) sigma[i]=(double*)malloc(sizeof(double)*N);
 
-	// float sigmaInv[N][N];
-	float **sigmaInv=(float**)malloc(sizeof(float*)*N);
-	for(int i=0;i<N;i++) sigmaInv[i]=(float*)malloc(sizeof(float)*N);
+	// double sigmaInv[N][N];
+	double **sigmaInv=(double**)malloc(sizeof(double*)*N);
+	for(int i=0;i<N;i++) sigmaInv[i]=(double*)malloc(sizeof(double)*N);
 
-	// float u[M][N];
-	float **u=(float**)malloc(sizeof(float*)*M);
-	for(int i=0;i<M;i++) u[i]=(float*)malloc(sizeof(float)*N);
+	// double u[M][N];
+	double **u=(double**)malloc(sizeof(double*)*M);
+	for(int i=0;i<M;i++) u[i]=(double*)malloc(sizeof(double)*N);
 
-	float dot,normSquared,norm, maxDiff;
+	double dot,normSquared,norm, maxDiff;
 
 	// setting a = d
 	// cout<<"A\n";
@@ -278,8 +278,8 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 		}
 
 		numIter++;
-		cout<<"iter = "<<numIter<<endl;
-	}while(numIter < 2);
+		cout<<"iter = "<<numIter << "\tmaxDiff="<<maxDiff<<endl;
+	}while(maxDiff > 0.00001);
 
 	cout<<"numIter = "<<numIter<<endl;
 
@@ -362,13 +362,14 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
     float sum=0, ret=retention/100.0;
 
     for(int i=0;i<N;i++){
-    	sigmaSorted[i]=SIGMA[i];
+    	sigmaSorted[i]=SIGMA[i]*SIGMA[i];
     	sum+=sigmaSorted[i];
     }
     for(int i=0;i<N;i++){
     	sigmaSorted[i]/=sum;
     }
-    sort(sigmaSorted,sigmaSorted + N);
+
+    sort(sigmaSorted,sigmaSorted + N,greater<int>());
 
     for(int i=0;i<N;i++){
     	ret-=sigmaSorted[i];
@@ -376,6 +377,10 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
     		*K=i+1;
     		break;
     	}
+    }
+
+    for(int i=0;i<N;i++){
+    	printf("%f\n", sigmaSorted[i]);
     }
 
     // float w[N][K];
@@ -393,6 +398,13 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
     	}
     }
 
+    for(int i=0;i<N;i++){
+    	for(int j=0;j<*K;j++){
+    		printf("%f\t", w[i][j]);
+    	}
+    	printf("\n");
+    }
+
     *D_HAT = (float*)malloc(sizeof(float)*M* *K);
     for(int i=0;i<M;i++){
     	for(int j=0;j<*K;j++){
@@ -403,10 +415,12 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
     	}
     }
 
-    // for(int i=0;i<M;i++){
-    // 	for(int j=0;j<*K;j++){
-    // 		printf("%.6f\t", (*D_HAT)[*K *i+j]);
-    // 	}
-    // 	printf("\n");
-    // }
+    printf("K=%d\n",*K);
+
+    for(int i=0;i<M;i++){
+    	for(int j=0;j<*K;j++){
+    		printf("%.6f\t", (*D_HAT)[*K *i+j]);
+    	}
+    	printf("\n");
+    }
 }

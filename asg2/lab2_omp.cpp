@@ -7,6 +7,8 @@
 #include<cmath>
 using namespace std;
 
+#define NUM_THREADS 4
+
 // a is p x q , b is q x r, res is p x r
 // void matmul(float **a,float **b, float **res, int p, int q, int r){
 // 	for (int i=0;i<p;i++){
@@ -57,6 +59,8 @@ double dot_product(double *a, double *b, int dim){
 // */
 void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 {
+	omp_set_dynamic(0);
+	omp_set_num_threads(NUM_THREADS);
 	//printf("called svd\n");
 
 	// double d[M][N];
@@ -158,7 +162,7 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 	double **u=(double**)malloc(sizeof(double*)*M);
 	for(int i=0;i<M;i++) u[i]=(double*)malloc(sizeof(double)*N);
 
-	double dot,normSquared,norm, maxDiff;
+	double maxDiff;
 
 	// setting a = d
 	// cout<<"A\n";
@@ -195,99 +199,116 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 			aPrev[i]=a[i][i];
 		}
 
+		#pragma omp parallel for num_threads(NUM_THREADS)
 		for(int i=0;i<N;i++){
 			// cout<<"i="<<i<<endl;
 			for(int j=0;j<N;j++){
 				q[i][j]=a[i][j];
 			}
-
 			// cout<<"init q[i] as ";
 			// print_vector(q[i],N);
-			
-			for(int k=0;k<i;k++){
-				dot=dot_product(a[i],q[k],N);
-				normSquared=dot_product(q[k],q[k],N);
-				// cout<<"k="<<k<<"\tdot="<<dot<<"\tnormSq="<<normSquared<<endl;
-				for(int j=0;j<N;j++){
-					// cout<<"step "<<q[i][j]<<"\t"<<(a[i][j]*dot)/normSquared << "\t"<<q[i][j] - (a[i][j]*dot)/normSquared<<endl;
-					q[i][j] -= (q[k][j]*dot)/normSquared;
+		}
+
+		for(int i=0;i<N;i++){
+			#pragma omp parallel num_threads(NUM_THREADS)
+			{
+				#pragma omp for schedule(dynamic,1)
+				for(int k=0;k<i;k++){
+					double dot=dot_product(a[i],q[k],N);
+					double normSquared=dot_product(q[k],q[k],N);
+					// cout<<"k="<<k<<"\tdot="<<dot<<"\tnormSq="<<normSquared<<endl;
+					#pragma omp critical
+					{
+						for(int j=0;j<N;j++){
+							// cout<<"step "<<q[i][j]<<"\t"<<(a[i][j]*dot)/normSquared << "\t"<<q[i][j] - (a[i][j]*dot)/normSquared<<endl;
+							q[i][j] -= (q[k][j]*dot)/normSquared;
+						}
+					}
 				}
 			}
-
 			// cout<<"updated q[i] as ";
 			// print_vector(q[i],N);
-
-			norm=sqrt(dot_product(q[i],q[i],N));
-			for(int j=0;j<N;j++){
-				q[i][j]/=norm;
-			}
 		}
-		
-		// cout<<"U transpose\n";
-		// for(int i=0;i<N;i++){
-		// 	for(int j=0;j<N;j++){
-		// 		// //printf("%d %d \t\t", i,j);
-		// 		//printf("%f\t", q[i][j] );
-		// 	}
-		// 	//printf("\n");
-		// }
-		// //printf("\n");
 
-		// cerr<<"normalising\n";
-		// for(int i=0;i<N;i++){
-		// 	norm=sqrt(dot_product(q[i],q[i],N));
-		// 	for(int j=0;j<N;j++){
-		// 		q[i][j]/=norm;
-		// 	}
-		// }
-
-
-		for(int i=0;i<N;i++){
-			for(int j=0;j<N;j++){
-				if(j>i){
-					r[i][j]=0;
-					continue;
-				} else{
-					r[i][j]=dot_product(q[j],a[i],N);
+		#pragma omp parallel num_threads(NUM_THREADS)
+		{
+			#pragma omp for
+			for(int i=0;i<N;i++){
+				double norm=sqrt(dot_product(q[i],q[i],N));
+				for(int j=0;j<N;j++){
+					q[i][j]/=norm;
 				}
 			}
-		}
+			
+			// cout<<"U transpose\n";
+			// for(int i=0;i<N;i++){
+			// 	for(int j=0;j<N;j++){
+			// 		// //printf("%d %d \t\t", i,j);
+			// 		//printf("%f\t", q[i][j] );
+			// 	}
+			// 	//printf("\n");
+			// }
+			// //printf("\n");
 
-		// cout<<"R transpose\n";
-		// for(int i=0;i<N;i++){
-			// for(int j=0;j<N;j++){
-				// //printf("%d %d \t\t", i,j);
-				//printf("%f\t", r[i][j] );
+			// cerr<<"normalising\n";
+			// for(int i=0;i<N;i++){
+			// 	norm=sqrt(dot_product(q[i],q[i],N));
+			// 	for(int j=0;j<N;j++){
+			// 		q[i][j]/=norm;
+			// 	}
+			// }
+
+			#pragma omp for
+			for(int i=0;i<N;i++){
+				for(int j=0;j<N;j++){
+					if(j>i){
+						r[i][j]=0;
+						continue;
+					} else{
+						r[i][j]=dot_product(q[j],a[i],N);
+					}
+				}
+			}
+
+			// cout<<"R transpose\n";
+			// for(int i=0;i<N;i++){
+				// for(int j=0;j<N;j++){
+					// //printf("%d %d \t\t", i,j);
+					//printf("%f\t", r[i][j] );
+				// }
+				//printf("\n");
 			// }
 			//printf("\n");
-		// }
-		//printf("\n");
 
-		for(int i=0;i<N;i++){
-			for(int j=0;j<N;j++){
-				a[i][j]=0;
-				eUpdated[i][j]=0;
-				for(int k=0;k<N;k++){
-					a[i][j]+=q[i][k]*r[k][j];
-					eUpdated[i][j]+=q[i][k]*e[k][j];
+			#pragma omp for
+			for(int i=0;i<N;i++){
+				for(int j=0;j<N;j++){
+					a[i][j]=0;
+					eUpdated[i][j]=0;
+					for(int k=0;k<N;k++){
+						a[i][j]+=q[i][k]*r[k][j];
+						eUpdated[i][j]+=q[i][k]*e[k][j];
+					}
 				}
 			}
 		}
 
-		maxDiff=0;
-		for(int i=0;i<N;i++){
-			if(fabs(a[i][i]-aPrev[i]) > maxDiff)
-				maxDiff=fabs(a[i][i]-aPrev[i]);
-		}
-		for(int i=0;i<N;i++){
-			for(int j=0;j<N;j++){
-				if(fabs(e[i][j]-eUpdated[i][j]) > maxDiff)
-					maxDiff=fabs(e[i][j]-eUpdated[i][j]);
-				e[i][j]=eUpdated[i][j];
+		#pragma omp single
+		{
+			maxDiff=0;
+			for(int i=0;i<N;i++){
+				if(fabs(a[i][i]-aPrev[i]) > maxDiff)
+					maxDiff=fabs(a[i][i]-aPrev[i]);
 			}
+			for(int i=0;i<N;i++){
+				for(int j=0;j<N;j++){
+					if(fabs(e[i][j]-eUpdated[i][j]) > maxDiff)
+						maxDiff=fabs(e[i][j]-eUpdated[i][j]);
+					e[i][j]=eUpdated[i][j];
+				}
+			}
+			numIter++;
 		}
-
-		numIter++;
 		// cout<<"iter = "<<numIter << "\tmaxDiff="<<maxDiff<<endl;
 	}while(maxDiff > 0.000001);
 
@@ -347,13 +368,17 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 			sigmaInv[i][i]=1/sigma[i][i];
 	}
 
-	for(int i=0;i<M;i++){
-		for(int j=0;j<N;j++){
-			u[i][j]=0;
-			for(int k=0;k<N;k++){
-				u[i][j]+=d[i][k]*eUpdated[k][j];
+	#pragma omp parallel num_threads(NUM_THREADS)
+	{
+		#pragma omp for
+		for(int i=0;i<M;i++){
+			for(int j=0;j<N;j++){
+				u[i][j]=0;
+				for(int k=0;k<N;k++){
+					u[i][j]+=d[i][k]*eUpdated[k][j];
+				}
+				u[i][j]*=sigmaInv[j][j];
 			}
-			u[i][j]*=sigmaInv[j][j];
 		}
 	}
 
@@ -523,15 +548,19 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
     // }
 
     *D_HAT = (float*)malloc(sizeof(float)*M* *K);
-    for(int i=0;i<M;i++){
-    	for(int j=0;j<*K;j++){
-    		(*D_HAT)[*K *i + j] =0;
-    		for(int l=0;l<N;l++){
-	    		(*D_HAT)[*K *i+j] += D[N*i + l]*w[l][j];
-    		}
-    	}
-    }
 
+    #pragma omp parallel num_threads(NUM_THREADS)
+    {
+    	#pragma omp for
+	    for(int i=0;i<M;i++){
+	    	for(int j=0;j<*K;j++){
+	    		(*D_HAT)[*K *i + j] =0;
+	    		for(int l=0;l<N;l++){
+		    		(*D_HAT)[*K *i+j] += D[N*i + l]*w[l][j];
+	    		}
+	    	}
+	    }
+	}
     printf("K=%d\n",*K);
 
     // printf("\nD_HAT\n\n");

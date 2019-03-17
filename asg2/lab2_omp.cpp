@@ -226,9 +226,36 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 					}
 				}
 			}
-			// cout<<"updated q[i] as ";
-			// print_vector(q[i],N);
 		}
+		
+		// double localSum[NUM_THREADS][N];
+		
+		// for(int i=0;i<NUM_THREADS;i++){
+		// 	for(int j=0;j<N;j++){
+		// 		localSum[i][j]=0;
+		// 	}
+		// }
+
+		// for(int i=0;i<N;i++){
+		// 	#pragma omp parallel num_threads(NUM_THREADS)
+		// 	{
+		// 		#pragma omp for schedule(dynamic,1)
+		// 		for(int k=0;k<i;k++){
+		// 			double dot=dot_product(a[i],q[k],N);
+		// 			double normSquared=dot_product(q[k],q[k],N);
+		// 			for(int j=0;j<N;j++){
+		// 				localSum[omp_get_thread_num()][j] += (q[k][j]*dot)/normSquared;
+		// 			}
+		// 		}
+		// 	}
+
+		// 	for(int k=0;k<NUM_THREADS && k<i;k++){
+		// 		for(int j=0;j<N;j++){
+		// 			q[i][j] -= localSum[k][j];
+		// 			localSum[k][j]=0;
+		// 		}
+		// 	}
+		// }
 
 		#pragma omp parallel num_threads(NUM_THREADS)
 		{

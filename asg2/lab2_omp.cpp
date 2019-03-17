@@ -1,6 +1,6 @@
 // #include <malloc.h>
 #include<stdlib.h>
-#include <omp.h>
+#include<omp.h>
 #include<stdio.h>
 #include<iostream>
 #include<algorithm>
@@ -31,11 +31,11 @@ using namespace std;
 // 	}
 // }
 
-void print_vector(double *a, int dim){
+// void print_vector(double *a, int dim){
 	// for(int i=0;i<dim;i++)
 		// //printf("%f\t", a[i]);
 	// //printf("\n");
-}
+// }
 
 double dot_product(double *a, double *b, int dim){
 	// cout<<"called dot_product bw\n";
@@ -125,8 +125,8 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 	for(int i=0;i<N;i++) q[i]=(double*)malloc(sizeof(double)*N);
 
 	// double q2[N][N];
-	double **q2=(double**)malloc(sizeof(double*)*N);
-	for(int i=0;i<N;i++) q2[i]=(double*)malloc(sizeof(double)*N);
+	// double **q2=(double**)malloc(sizeof(double*)*N);
+	// for(int i=0;i<N;i++) q2[i]=(double*)malloc(sizeof(double)*N);
 	
 	// double r[N][N];
 	double **r=(double**)malloc(sizeof(double*)*N);
@@ -254,13 +254,13 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 		}
 
 		// cout<<"R transpose\n";
-		for(int i=0;i<N;i++){
-			for(int j=0;j<N;j++){
+		// for(int i=0;i<N;i++){
+			// for(int j=0;j<N;j++){
 				// //printf("%d %d \t\t", i,j);
 				//printf("%f\t", r[i][j] );
-			}
+			// }
 			//printf("\n");
-		}
+		// }
 		//printf("\n");
 
 		for(int i=0;i<N;i++){
@@ -296,11 +296,11 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 
 
 	// cerr<<"transposing\n";
-	for(int i=0;i<N;i++){
-		for(int j=0;j<N;j++){
-			q2[i][j]=q[j][i];
-		}
-	}
+	// for(int i=0;i<N;i++){
+	// 	for(int j=0;j<N;j++){
+	// 		q2[i][j]=q[j][i];
+	// 	}
+	// }
 
 /*
 	cout<<"Q\n";
@@ -414,19 +414,19 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 	// 	printf("\n");
 	// }
 
-	double sam=0;
-	//printf("V_T to be returned\n");
-	for(int i=0;i<N;i++){
-		for(int j=0;j<M;j++){
-			sam=dTranspose[i][j];
-			for(int k=0;k<N;k++){
-				sam -= eUpdated[i][k] * sigma[k][k] * (*V_T)[M*k+j];
-			}
-			// if(fabs(sam) >= 0.0001 )
-				//printf("i=%d j=%d temp=%f\n", i,j, sam);
-		}
-		// //printf("\n");
-	}
+	// double sam=0;
+	// //printf("V_T to be returned\n");
+	// for(int i=0;i<N;i++){
+	// 	for(int j=0;j<M;j++){
+	// 		sam=dTranspose[i][j];
+	// 		for(int k=0;k<N;k++){
+	// 			sam -= eUpdated[i][k] * sigma[k][k] * (*V_T)[M*k+j];
+	// 		}
+	// 		// if(fabs(sam) >= 0.0001 )
+	// 			//printf("i=%d j=%d temp=%f\n", i,j, sam);
+	// 	}
+	// 	// //printf("\n");
+	// }
 
 }
 

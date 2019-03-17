@@ -143,6 +143,9 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 	// double temp[N];
 	double *temp=(double*)malloc(sizeof(double*)*N);
 
+	// double aPrev[N];
+	double *aPrev=(double*)malloc(sizeof(double*)*N);
+
 	// double sigma[N][N];
 	double **sigma=(double**)malloc(sizeof(double*)*N);
 	for(int i=0;i<N;i++) sigma[i]=(double*)malloc(sizeof(double)*N);
@@ -188,6 +191,9 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 
 	int numIter=0;
 	do{
+		for(int i=0;i<N;i++){
+			aPrev[i]=a[i][i];
+		}
 
 		for(int i=0;i<N;i++){
 			// cout<<"i="<<i<<endl;
@@ -270,6 +276,10 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 
 		maxDiff=0;
 		for(int i=0;i<N;i++){
+			if(fabs(a[i][i]-aPrev[i]) > maxDiff)
+				maxDiff=fabs(a[i][i]-aPrev[i]);
+		}
+		for(int i=0;i<N;i++){
 			for(int j=0;j<N;j++){
 				if(fabs(e[i][j]-eUpdated[i][j]) > maxDiff)
 					maxDiff=fabs(e[i][j]-eUpdated[i][j]);
@@ -279,7 +289,7 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 
 		numIter++;
 		// cout<<"iter = "<<numIter << "\tmaxDiff="<<maxDiff<<endl;
-	}while(maxDiff > 0.000000001);
+	}while(maxDiff > 0.000001);
 
 	// cout<<"numIter = "<<numIter<<endl;
 	cout<<"iter = "<<numIter << "\tmaxDiff="<<maxDiff<<endl;
@@ -292,22 +302,40 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 		}
 	}
 
+/*
 	cout<<"Q\n";
 	for(int i=0;i<N;i++){
 		for(int j=0;j<N;j++){
-			// //printf("%d %d \t\t", i,j);
-			//printf("%f\t", q2[i][j] );
+			// printf("%d %d \t\t", i,j);
+			printf("%0.f\t", q2[i][j] );
 		}
-		//printf("\n");
+		printf("\n\n");
 	}
-	//printf("\n");
+	// printf("\n");
+*/
+
+	// for(int i=0;i<N;i++){
+	// 	for(int j=0;j<N;j++){
+	// 		if( (i==j && q2[i][j]!=1) || q2[i][j]!=0 )
+	// 	}
+	// }
 
 // eUpdated has eTranspose now
 	for(int i=0;i<N;i++){
 		for(int j=0;j<N;j++){
 			eUpdated[i][j]=e[j][i];
+			// printf("%f\t", eUpdated[i][j]);
 		}
+		// printf("\n");
 	}
+
+	// printf("E infinity transpose\n");
+	// for(int i=0;i<N;i++){
+	// 	for(int j=0;j<N;j++){
+	// 		printf("%f\t", e[i][j]);
+	// 	}
+	// 	printf("\n");
+	// }
 
 	for(int i=0;i<N;i++){
 		for(int j=0;j<N;j++){
@@ -364,27 +392,27 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 		*(*SIGMA +i)=sigma[i][i];
 	}
 
-/*
-	//printf("U to be ret\n");
-	for(int i=0;i<N;i++){
-		for(int j=0;j<N;j++){
-			//printf("%f\t", (*U)[N*i+j]);
-		}
-		//printf("\n");
-	}
 
-	//printf("SIGMA\n");
-	for(int i=0;i<N;i++){
-		//printf("%f\n", *(*SIGMA +i));
-	}
+	// printf("U to be ret\n");
+	// for(int i=0;i<N;i++){
+	// 	for(int j=0;j<N;j++){
+	// 		printf("%f\t", (*U)[N*i+j]);
+	// 	}
+	// 	printf("\n");
+	// }
 
-	//printf("V_T to be ret\n");
-	for(int i=0;i<M;i++){
-		for(int j=0;j<M;j++){
-			//printf("%f\t", (*V_T)[M*i+j]);
-		}
-		//printf("\n");
-	}
+	// printf("SIGMA\n");
+	// for(int i=0;i<N;i++){
+	// 	printf("%f\n", *(*SIGMA +i));
+	// }
+
+	// printf("V_T to be ret\n");
+	// for(int i=0;i<M;i++){
+	// 	for(int j=0;j<M;j++){
+	// 		printf("%f\t", (*V_T)[M*i+j]);
+	// 	}
+	// 	printf("\n");
+	// }
 
 	double sam=0;
 	//printf("V_T to be returned\n");
@@ -394,12 +422,12 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 			for(int k=0;k<N;k++){
 				sam -= eUpdated[i][k] * sigma[k][k] * (*V_T)[M*k+j];
 			}
-			if(fabs(sam) >= 0.0001 )
+			// if(fabs(sam) >= 0.0001 )
 				//printf("i=%d j=%d temp=%f\n", i,j, sam);
 		}
 		// //printf("\n");
 	}
-*/
+
 }
 
 // /*
@@ -410,6 +438,11 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** D_HAT, int *K)
 {
     //printf("called pca\n");
+
+	// printf("SIGMA\n");
+ //    for(int i=0;i<N;i++){
+ //    	printf("%f\n", SIGMA[i]);
+ //    }
 
     float* sigmaSorted = (float*)malloc(sizeof(float)*N);
     float sum=0, ret=retention/100.0;
@@ -425,21 +458,28 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
     // }
     // //printf("sum=%f\n", sum);
 
-    // //printf("sigmaSorted\n");
+    // printf("sigmaSorted\n");
     // for(int i=0;i<N;i++){
-    // 	//printf("%f\n", sigmaSorted[i]);
+    // 	printf("%f\n", sigmaSorted[i]);
     // }
 
     for(int i=0;i<N;i++){
     	sigmaSorted[i]/=sum;
     }
 
-    // //printf("sigmaSorted\n");
+    // printf("sigmaSorted\n");
     // for(int i=0;i<N;i++){
-    // 	//printf("%f\n", sigmaSorted[i]);
+    // 	printf("%f\n", sigmaSorted[i]);
     // }
 
-    sort(sigmaSorted,sigmaSorted + N,greater<int>());
+    sort(sigmaSorted,sigmaSorted + N,greater<float>());
+
+    // printf("ret = %f\n", ret);
+
+	// printf("sigmaSorted\n");
+ //    for(int i=0;i<N;i++){
+ //    	printf("%f\n", sigmaSorted[i]);
+ //    }
 
     for(int i=0;i<N;i++){
     	ret-=sigmaSorted[i];
@@ -474,12 +514,12 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
     	}
     }
 
-    // //printf("\nw\n\n");
+    // printf("\nw\n\n");
     // for(int i=0;i<N;i++){
     // 	for(int j=0;j<*K;j++){
-    // 		//printf("%f\t", w[i][j]);
+    // 		printf("%f\t", w[i][j]);
     // 	}
-    // 	//printf("\n");
+    // 	printf("\n");
     // }
 
     *D_HAT = (float*)malloc(sizeof(float)*M* *K);
@@ -494,11 +534,11 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
 
     printf("K=%d\n",*K);
 
-    // //printf("\nD_HAT\n\n");
+    // printf("\nD_HAT\n\n");
     // for(int i=0;i<M;i++){
     // 	for(int j=0;j<*K;j++){
-    // 		//printf("%.6f\t", (*D_HAT)[*K *i+j]);
+    // 		printf("%.6f\t", (*D_HAT)[*K *i+j]);
     // 	}
-    // 	//printf("\n");
+    // 	printf("\n");
     // }
 }

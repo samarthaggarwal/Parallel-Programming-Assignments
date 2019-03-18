@@ -1,9 +1,9 @@
 #include "lab2_io.h"
 #include "lab2_omp.h"
-
+#include <iostream>
 #include <stdlib.h>
 #include <omp.h>
-
+using namespace std;
 /*
 	Arguments:
 		arg1: input filename (consist M, N and D)
@@ -62,30 +62,47 @@ int main(int argc, char const *argv[])
 	// 	*****************************************************
 	// */
 	SVD(M, N, D, &U, &SIGMA, &V_T);
+	// // ############################
+	// 	double **tmp_mat = (double **)malloc(N*sizeof(double *));
+	// 	for(int i=0;i<N;i++){
+	// 		tmp_mat[i] = (double *)malloc(M*sizeof(double));
+	// 	}
+	// 	double **tmp_mat2 = (double **)malloc(N*sizeof(double *));
+	// 	for(int i=0;i<N;i++){
+	// 		tmp_mat2[i] = (double *)malloc(M*sizeof(double));
+	// 	}
 
-	end_time = omp_get_wtime();
-	computation_time = ((double) (end_time - start_time));
-	printf("time = %f\n", computation_time);
 
-	// int m=2;
-	// int n=2;
-	// float d[4] = {4,0,3,-5};
-
-	// int m=3;
-	// int n=3;
-	// float d[9] = {12,-51,4,6,167,-68,-4,24,-41};
-	// float *u = (float*) malloc(sizeof(float) * N*N);
-	// float *s = (float*) malloc(sizeof(float) * N);
-	// float *vt = (float*) malloc(sizeof(float) * M*M);
-	
-	// SVD(m,n,d, &u, &s, &vt);
-
+	// 	for(int i=0;i<N;i++){
+	// 		for(int j=0;j<M;j++){
+	// 			// tmp_mat2[i][j] = 0;
+	// 			// for(int k=0;k<N;k++){
+	// 			if(j<N){
+	// 				tmp_mat2[i][j] += U[i*N+j]*SIGMA[j];
+	// 			}else{
+	// 				tmp_mat2[i][j]=0;
+	// 			}
+	// 			// }
+	// 		}
+	// 	}
+	// 	cout<<"CHECK MAIN"<<endl;
+	// 	for(int i=0;i<N;i++){
+	// 		for(int j=0;j<M;j++){
+	// 			tmp_mat[i][j] = 0;
+	// 			for(int k=0;k<M;k++){
+	// 				tmp_mat[i][j] += tmp_mat2[i][k]*V_T[k*M+j];
+	// 			}
+	// 			// if(i==0)
+	// 				printf("%f ",tmp_mat[i][j]);
+	// 		}
+	// 		cout<<"\n";
+	// 	}
+	// 	// ############################
 	PCA(retention, M, N, D, U, SIGMA, &D_HAT, &K);
 
 	end_time = omp_get_wtime();
 	computation_time = ((double) (end_time - start_time));
-	
-	printf("time = %f\n", computation_time);
+	cout<<computation_time<<endl;
 	/*
 		--Pre-defined functions --
 		checks for correctness of results computed by SVD and PCA

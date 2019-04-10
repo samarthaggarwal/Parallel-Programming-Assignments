@@ -777,13 +777,13 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
 	    	}
 	    }
 	}
-    // //printf("K=%d\n",*K);
+    printf("K=%d\n",*K);
 
-    // //printf("\nD_HAT\n\n");
-    // for(int i=0;i<M;i++){
-    // 	for(int j=0;j<*K;j++){
-    // 		//printf("%.6f\t", (*D_HAT)[*K *i+j]);
-    // 	}
-    // 	//printf("\n");
-    // }
+    printf("\nD_HAT\n\n");
+    for(int i=0;i<M;i++){
+    	for(int j=0;j<*K;j++){
+    		printf("%.6f\t", (*D_HAT)[*K *i+j]);
+    	}
+    	printf("\n");
+    }
 }

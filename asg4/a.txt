@@ -1,0 +1,9 @@
+match_counts, matches
+2
+index=0 value=0
+index=1 value=2
+num patterns = 1
+match counts = 2
+0 2 
+
+Time elapsed: 0.000050

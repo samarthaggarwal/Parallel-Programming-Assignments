@@ -62,6 +62,29 @@ int main(int argc, char const *argv[])
 	// 	*****************************************************
 	// */
 	SVD(M, N, D, &U, &SIGMA, &V_T);
+
+	printf("SIGMA\n");
+	for(int i=0; i<N;i++){
+		printf("%f ",SIGMA[i]);
+		printf("\n");
+	}
+
+	printf("\nU\n");
+	for(int i=0; i<N;i++){
+		for(int j=0;j<N;j++){
+			printf("%f ",U[i*N + j]);
+		}
+		printf("\n");
+	}
+
+	printf("\nV_T\n");
+	for(int i=0; i<N;i++){
+		for(int j=0;j<M;j++){
+			printf("%f ",V_T[i*M + j]);
+		}
+		printf("\n");
+	}
+
 	// // ############################
 	// 	double **tmp_mat = (double **)malloc(N*sizeof(double *));
 	// 	for(int i=0;i<N;i++){

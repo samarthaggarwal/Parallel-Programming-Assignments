@@ -88,15 +88,16 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 		}
 	}
 
-// print d
-	// for(int i=0;i<M;i++){
-	// 	for(int j=0;j<N;j++){
-	// 		// ////printf("%d %d \t\t", i,j);
-	// 		////printf("%.0f\t", d[i][j] );
-	// 	}
-	// 	////printf("\n");
-	// }
-	// ////printf("\n");
+// // print d
+// 	printf("printing D\n");
+// 	for(int i=0;i<M;i++){
+// 		for(int j=0;j<N;j++){
+// 			// ////printf("%d %d \t\t", i,j);
+// 			printf("%f\t", d[i][j] );
+// 		}
+// 		printf("\n");
+// 	}
+// 	printf("\n");
 
 // print dTranspose
 	// for(int i=0;i<M;i++){
@@ -121,15 +122,16 @@ void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T)
 			}
 		}
 	}
-// print dTd
-	// for(int i=0;i<N;i++){
-	// 	for(int j=0;j<N;j++){
-	// 		// ////printf("%d %d \t\t", i,j);
-	// 		////printf("%.0f\t", a[i][j] );
-	// 	}
-	// 	////printf("\n");
-	// }
-	// ////printf("\n");
+// // print dTd
+// 	printf("printing dTd\n");
+// 	for(int i=0;i<N;i++){
+// 		for(int j=0;j<N;j++){
+// 			// ////printf("%d %d \t\t", i,j);
+// 			printf("%f\t", a[i][j] );
+// 		}
+// 		printf("\n");
+// 	}
+// 	printf("\n");
 
 // QR decomposition
 	// double q[N][N];
@@ -755,12 +757,12 @@ void PCA(int retention, int M, int N, float* D, float* U, float* SIGMA, float** 
     	}
     }
 
-    // //printf("\nw\n\n");
+    // printf("\nw\n");
     // for(int i=0;i<N;i++){
     // 	for(int j=0;j<*K;j++){
-    // 		//printf("%f\t", w[i][j]);
+    // 		printf("%f\t", w[i][j]);
     // 	}
-    // 	//printf("\n");
+    // 	printf("\n");
     // }
 
     *D_HAT = (float*)malloc(sizeof(float)*M* *K);
